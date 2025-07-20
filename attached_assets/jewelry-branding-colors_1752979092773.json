@@ -1,0 +1,105 @@
+{
+  "primaryColors": {
+    "brand": {
+      "name": "Amber Gold",
+      "hex": "#F59E0B",
+      "tailwind": "amber-500",
+      "usage": "Primary brand color, buttons, highlights, logo background"
+    },
+    "brandDark": {
+      "name": "Deep Amber",
+      "hex": "#D97706",
+      "tailwind": "amber-600",
+      "usage": "Hover states, active elements, button gradients"
+    },
+    "brandDarker": {
+      "name": "Rich Amber",
+      "hex": "#B45309",
+      "tailwind": "amber-700",
+      "usage": "Deep hover states, text gradients"
+    }
+  },
+  "secondaryColors": {
+    "slate": {
+      "50": "#F8FAFC",
+      "100": "#F1F5F9",
+      "200": "#E2E8F0",
+      "300": "#CBD5E1",
+      "400": "#94A3B8",
+      "500": "#64748B",
+      "600": "#475569",
+      "700": "#334155",
+      "800": "#1E293B",
+      "900": "#0F172A",
+      "usage": "Text, backgrounds, borders, neutral elements"
+    }
+  },
+  "gradients": {
+    "primary": {
+      "name": "Amber Gradient",
+      "css": "linear-gradient(135deg, #ffd700 0%, #ffb347 100%)",
+      "tailwind": "from-amber-500 to-amber-600",
+      "usage": "Primary buttons, brand elements"
+    },
+    "background": {
+      "name": "Subtle Background",
+      "css": "linear-gradient(to bottom right, #f8fafc 0%, #f1f5f9 100%)",
+      "tailwind": "from-slate-50 to-slate-100",
+      "usage": "Page backgrounds"
+    },
+    "jewelry": {
+      "name": "Jewelry Accent",
+      "css": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "usage": "Special jewelry-themed elements"
+    },
+    "hero": {
+      "name": "Hero Text",
+      "css": "linear-gradient(to right, #d97706 0%, #92400e 100%)",
+      "tailwind": "from-amber-600 to-amber-800",
+      "usage": "Hero headings, special text"
+    }
+  },
+  "functionalColors": {
+    "success": {
+      "hex": "#10B981",
+      "tailwind": "green-500",
+      "usage": "Success states, completed uploads"
+    },
+    "error": {
+      "hex": "#EF4444",
+      "tailwind": "red-500",
+      "usage": "Error states, validation messages"
+    },
+    "warning": {
+      "hex": "#F59E0B",
+      "tailwind": "amber-500",
+      "usage": "Warning states, pending actions"
+    },
+    "info": {
+      "hex": "#3B82F6",
+      "tailwind": "blue-500",
+      "usage": "Information states, metrics"
+    }
+  },
+  "lightModeColors": {
+    "background": "#FFFFFF",
+    "foreground": "#171717",
+    "usage": "Default light theme"
+  },
+  "darkModeColors": {
+    "background": "#0A0A0A",
+    "foreground": "#EDEDED",
+    "usage": "Dark theme support"
+  },
+  "textColors": {
+    "primary": "#1E293B",
+    "secondary": "#64748B",
+    "muted": "#94A3B8",
+    "inverse": "#FFFFFF"
+  },
+  "borderColors": {
+    "light": "#E2E8F0",
+    "medium": "#CBD5E1",
+    "dark": "#94A3B8"
+  }
+}

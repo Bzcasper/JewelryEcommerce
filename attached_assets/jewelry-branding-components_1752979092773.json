@@ -1,0 +1,219 @@
+{
+  "components": {
+    "buttons": {
+      "primary": {
+        "base": "bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold transition-all duration-200 shadow-lg hover:shadow-xl",
+        "hover": "hover:from-amber-600 hover:to-amber-700",
+        "disabled": "disabled:opacity-50 disabled:cursor-not-allowed",
+        "sizes": {
+          "sm": "px-3 py-1 text-sm rounded-md",
+          "md": "px-4 py-2 rounded-lg",
+          "lg": "px-6 py-3 rounded-lg"
+        },
+        "withIcon": "flex items-center space-x-2"
+      },
+      "secondary": {
+        "base": "bg-slate-100 text-slate-600 font-medium transition-colors",
+        "hover": "hover:bg-slate-200 hover:text-slate-800",
+        "disabled": "disabled:opacity-50 disabled:cursor-not-allowed",
+        "sizes": {
+          "sm": "px-3 py-1 text-sm rounded-md",
+          "md": "px-4 py-2 rounded-lg",
+          "lg": "px-6 py-3 rounded-lg"
+        }
+      },
+      "ghost": {
+        "base": "text-slate-600 font-medium transition-colors",
+        "hover": "hover:text-amber-600",
+        "sizes": {
+          "sm": "p-1",
+          "md": "p-2",
+          "lg": "p-3"
+        }
+      },
+      "icon": {
+        "base": "p-2 rounded-lg transition-colors",
+        "variants": {
+          "default": "text-slate-600 hover:text-amber-600",
+          "white": "bg-white/80 text-slate-600 hover:text-amber-600 backdrop-blur-md",
+          "colored": "bg-amber-500 text-white hover:bg-amber-600"
+        }
+      }
+    },
+    "cards": {
+      "product": {
+        "container": "bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group",
+        "imageContainer": "relative aspect-square overflow-hidden",
+        "image": "object-cover group-hover:scale-105 transition-transform duration-300",
+        "content": "p-4",
+        "title": "font-semibold text-slate-800 line-clamp-2 mb-1",
+        "description": "text-sm text-slate-500 line-clamp-2",
+        "price": "text-2xl font-bold text-slate-800",
+        "tags": "flex flex-wrap gap-1 mb-3",
+        "actions": "flex items-center justify-between"
+      },
+      "category": {
+        "container": "bg-white rounded-xl shadow-lg p-6 mb-8",
+        "title": "text-lg font-semibold text-slate-800 mb-4",
+        "buttons": "flex flex-wrap gap-3"
+      },
+      "modal": {
+        "overlay": "fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4",
+        "container": "bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden",
+        "header": "flex items-center justify-between p-6 border-b border-slate-200",
+        "content": "p-6 max-h-[calc(90vh-120px)] overflow-y-auto"
+      }
+    },
+    "forms": {
+      "input": {
+        "base": "w-full px-3 py-2 border border-slate-300 rounded-lg transition-colors",
+        "focus": "focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500",
+        "error": "border-red-300 focus:ring-red-500 focus:border-red-500",
+        "disabled": "disabled:bg-slate-100 disabled:cursor-not-allowed"
+      },
+      "select": {
+        "base": "px-4 py-2 border border-slate-300 rounded-lg transition-colors",
+        "focus": "focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+      },
+      "uploadArea": {
+        "base": "border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer",
+        "default": "border-slate-300 hover:border-amber-400 hover:bg-amber-50",
+        "active": "border-amber-400 bg-amber-50"
+      }
+    },
+    "navigation": {
+      "header": {
+        "container": "bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50",
+        "content": "container mx-auto px-4 py-4",
+        "layout": "flex items-center justify-between",
+        "logo": "flex items-center space-x-3",
+        "nav": "hidden md:flex items-center space-x-8",
+        "actions": "flex items-center space-x-4"
+      },
+      "logo": {
+        "icon": "bg-gradient-to-br from-amber-500 to-amber-600 p-2 rounded-xl shadow-lg",
+        "text": "text-2xl font-bold text-slate-800",
+        "subtitle": "text-sm text-slate-500"
+      },
+      "links": {
+        "base": "text-slate-600 font-medium transition-colors",
+        "hover": "hover:text-amber-600"
+      }
+    },
+    "feedback": {
+      "loading": {
+        "spinner": "w-12 h-12 border-4 border-amber-200 rounded-full animate-spin",
+        "overlay": "absolute top-0 left-0 w-12 h-12 border-4 border-transparent border-t-amber-500 rounded-full animate-spin",
+        "text": "text-slate-600 font-medium"
+      },
+      "alerts": {
+        "error": "p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3",
+        "success": "p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3",
+        "warning": "p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center space-x-3",
+        "info": "p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center space-x-3"
+      },
+      "progress": {
+        "container": "w-full bg-slate-200 rounded-full h-2",
+        "bar": "bg-gradient-to-r from-amber-500 to-amber-600 h-2 rounded-full transition-all duration-300"
+      }
+    },
+    "tags": {
+      "category": "bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full",
+      "material": "bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full",
+      "status": {
+        "inStock": "bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full",
+        "outOfStock": "bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full"
+      }
+    },
+    "overlays": {
+      "productActions": {
+        "container": "absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity",
+        "button": "p-2 rounded-full backdrop-blur-md transition-colors"
+      },
+      "imageNavigation": {
+        "button": "absolute top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity",
+        "indicators": "absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1"
+      },
+      "stockStatus": {
+        "container": "absolute inset-0 bg-black/50 flex items-center justify-center",
+        "badge": "bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold"
+      }
+    }
+  },
+  "patterns": {
+    "hover": {
+      "scale": "hover:scale-105 transition-transform duration-300",
+      "shadow": "hover:shadow-xl transition-shadow duration-300",
+      "color": "hover:text-amber-600 transition-colors",
+      "background": "hover:bg-amber-50 transition-colors"
+    },
+    "focus": {
+      "ring": "focus:outline-none focus:ring-2 focus:ring-amber-500",
+      "border": "focus:border-amber-500"
+    },
+    "disabled": {
+      "opacity": "disabled:opacity-50",
+      "cursor": "disabled:cursor-not-allowed",
+      "background": "disabled:bg-slate-100"
+    },
+    "responsive": {
+      "grid": "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+      "flex": "flex-col md:flex-row",
+      "spacing": "space-y-4 md:space-y-0 md:space-x-4",
+      "text": "text-sm sm:text-base lg:text-lg"
+    }
+  },
+  "states": {
+    "loading": {
+      "button": "opacity-50 cursor-not-allowed",
+      "spinner": "animate-spin",
+      "text": "text-slate-500"
+    },
+    "error": {
+      "border": "border-red-300",
+      "background": "bg-red-50",
+      "text": "text-red-700"
+    },
+    "success": {
+      "border": "border-green-300",
+      "background": "bg-green-50",
+      "text": "text-green-700"
+    },
+    "selected": {
+      "background": "bg-gradient-to-r from-amber-500 to-amber-600",
+      "text": "text-white",
+      "shadow": "shadow-lg"
+    },
+    "liked": {
+      "background": "bg-red-500",
+      "text": "text-white",
+      "icon": "fill-current"
+    }
+  },
+  "layouts": {
+    "page": {
+      "container": "min-h-screen bg-gradient-to-br from-slate-50 to-slate-100",
+      "main": "container mx-auto px-4 py-8",
+      "hero": "text-center mb-12",
+      "section": "mt-8"
+    },
+    "grid": {
+      "products": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6",
+      "categories": "flex flex-wrap gap-3",
+      "images": "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+    },
+    "flexbox": {
+      "between": "flex items-center justify-between",
+      "center": "flex items-center justify-center",
+      "column": "flex flex-col",
+      "wrap": "flex flex-wrap",
+      "gap": "space-x-4"
+    }
+  },
+  "animations": {
+    "fadeIn": "fade-in",
+    "shimmer": "shimmer",
+    "hoverScale": "hover-scale",
+    "spin": "animate-spin"
+  }
+}

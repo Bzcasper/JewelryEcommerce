@@ -1,0 +1,135 @@
+{
+  "fontFamilies": {
+    "primary": {
+      "name": "Geist",
+      "type": "Sans-serif",
+      "source": "next/font/google",
+      "variable": "--font-geist-sans",
+      "usage": "Primary text, headings, UI elements",
+      "characteristics": "Modern, clean, highly readable"
+    },
+    "monospace": {
+      "name": "Geist Mono",
+      "type": "Monospace",
+      "source": "next/font/google",
+      "variable": "--font-geist-mono",
+      "usage": "Code, technical text, data display"
+    },
+    "fallback": {
+      "name": "Arial, Helvetica, sans-serif",
+      "usage": "System fallback fonts"
+    },
+    "icons": {
+      "name": "Font Awesome 6.0.0",
+      "source": "CDN",
+      "usage": "Icon fonts (supplementary to Lucide React)"
+    }
+  },
+  "textSizes": {
+    "hero": {
+      "desktop": "5xl (48px)",
+      "mobile": "responsive",
+      "usage": "Main hero headings",
+      "fontWeight": "bold"
+    },
+    "pageTitle": {
+      "size": "2xl (24px)",
+      "usage": "Page titles, section headers",
+      "fontWeight": "bold"
+    },
+    "cardTitle": {
+      "size": "lg (18px)",
+      "usage": "Product titles, card headers",
+      "fontWeight": "semibold"
+    },
+    "body": {
+      "size": "base (16px)",
+      "usage": "Main body text, descriptions",
+      "fontWeight": "normal"
+    },
+    "small": {
+      "size": "sm (14px)",
+      "usage": "Secondary text, captions",
+      "fontWeight": "normal"
+    },
+    "tiny": {
+      "size": "xs (12px)",
+      "usage": "Labels, badges, fine print",
+      "fontWeight": "normal"
+    }
+  },
+  "fontWeights": {
+    "normal": "400",
+    "medium": "500",
+    "semibold": "600",
+    "bold": "700"
+  },
+  "textStyles": {
+    "brandHeading": {
+      "element": "h1",
+      "classes": "text-5xl font-bold text-slate-800 bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent",
+      "description": "Main brand heading with gradient text effect"
+    },
+    "sectionTitle": {
+      "element": "h2",
+      "classes": "text-2xl font-bold text-slate-800",
+      "description": "Section headings"
+    },
+    "productTitle": {
+      "element": "h3",
+      "classes": "font-semibold text-slate-800 line-clamp-2",
+      "description": "Product card titles with text clamping"
+    },
+    "bodyText": {
+      "element": "p",
+      "classes": "text-slate-600",
+      "description": "Main body text"
+    },
+    "secondaryText": {
+      "element": "p",
+      "classes": "text-slate-500",
+      "description": "Secondary descriptive text"
+    },
+    "priceText": {
+      "element": "span",
+      "classes": "text-2xl font-bold text-slate-800",
+      "description": "Product pricing display"
+    },
+    "linkText": {
+      "element": "a",
+      "classes": "text-slate-600 hover:text-amber-600 transition-colors font-medium",
+      "description": "Navigation and inline links"
+    }
+  },
+  "textEffects": {
+    "gradientText": {
+      "implementation": "bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent",
+      "usage": "Brand headings, special emphasis"
+    },
+    "lineClamp": {
+      "implementation": "line-clamp-2",
+      "usage": "Truncate long product descriptions"
+    },
+    "antialiased": {
+      "implementation": "antialiased",
+      "usage": "Applied globally for smooth text rendering"
+    }
+  },
+  "responsiveTypography": {
+    "desktop": {
+      "heroSize": "text-5xl",
+      "titleSize": "text-2xl",
+      "bodySize": "text-base"
+    },
+    "mobile": {
+      "heroSize": "responsive scaling",
+      "titleSize": "responsive scaling",
+      "bodySize": "text-base"
+    }
+  },
+  "textAlignment": {
+    "center": "Hero sections, empty states, modals",
+    "left": "Product cards, forms, content areas",
+    "right": "Pricing, action buttons"
+  }
+}

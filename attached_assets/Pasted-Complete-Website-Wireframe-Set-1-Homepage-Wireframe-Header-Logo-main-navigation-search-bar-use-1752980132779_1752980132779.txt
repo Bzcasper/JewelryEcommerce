@@ -1,0 +1,83 @@
+Complete Website Wireframe Set
+1. Homepage Wireframe
+
+Header: Logo, main navigation, search bar, user/cart icons
+Hero Section: Featured jewelry with call-to-action
+Categories: Visual category grid (Rings, Necklaces, Earrings, Bracelets)
+Featured Products: Product grid with images, titles, prices
+Trust Section: Authentication, quality, sustainability messaging
+Newsletter Signup: Email capture
+Footer: Comprehensive site links and information
+
+2. Product Listing Page Wireframe
+
+Breadcrumb Navigation: Clear page hierarchy
+Filter Sidebar: Price, brand, material, era filters
+Product Grid: 3-column layout with product cards
+Sort & View Options: Price sorting, grid/list view toggle
+Pagination: Navigate through product pages
+Product Cards: Image, title, era/details, price
+
+3. Product Detail Page Wireframe
+
+Product Images: Large main image with thumbnail strip
+Product Information: Title, price, authentication badge
+Product Details: Brand, era, material, size, condition
+Size Selector: Available sizes with selection
+Add to Cart: Primary action button
+Care Instructions: Maintenance information
+Related Products: "You might also like" section
+Recently Viewed: User browsing history
+
+4. Cart & Checkout Wireframe
+
+Progress Indicator: 3-step checkout process
+Cart Items: Product images, details, quantity, remove options
+Order Summary: Subtotal, shipping, tax, total calculations
+Promo Code: Discount code entry
+Authentication Badge: Trust signals
+Payment Options: Primary checkout + PayPal
+Security Messaging: SSL encryption notice
+
+5. User Account & Profile Wireframe
+
+Account Navigation: Profile, Orders, Wishlist, Addresses, Settings tabs
+Profile Information: Personal details form
+Account Overview: Statistics, recent orders, rewards status
+Order History: Past purchases with details
+Quick Actions: Common account functions
+Loyalty Program: Points and tier status
+
+6. Mobile Wireframes (5 Key Screens)
+
+Mobile Homepage: Condensed navigation, touch-friendly categories
+Mobile Product Detail: Swipeable image gallery, simplified layout
+Mobile Cart: Streamlined checkout process
+Mobile Menu: Hamburger menu with categories and account options
+Mobile Search: Search bar with filters and recent searches
+Mobile Account: User profile with quick access menu
+
+Key Design Principles Applied:
+Desktop Focus:
+
+Clean, professional layout suitable for pre-owned jewelry market
+Emphasis on product imagery and authentication
+Trust signals prominently displayed
+Easy filtering and search functionality
+
+Mobile Optimization:
+
+Touch-friendly interface (44px minimum touch targets)
+Simplified navigation with bottom tab bar
+Large product images for detailed viewing
+Streamlined forms and checkout process
+One-handed operation optimized
+
+E-commerce Best Practices:
+
+Clear product hierarchy and categorization
+Multiple product discovery paths
+Robust filtering and search capabilities
+Trust and authentication messaging
+Simplified checkout flow
+Account management functionality

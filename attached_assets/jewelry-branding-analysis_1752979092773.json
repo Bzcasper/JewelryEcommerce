@@ -1,0 +1,73 @@
+{
+  "brandName": "Casper's Treasure Chest",
+  "tagline": "Premium Jewelry Collection",
+  "description": "Discover exquisite jewelry pieces with AI-powered product discovery. Upload jewelry images and let intelligent system create perfect product listings.",
+  "businessModel": "AI-powered jewelry e-commerce platform with automated product listing creation",
+  "targetAudience": "Premium jewelry customers seeking curated collections",
+  "brandPersonality": {
+    "elegant": true,
+    "premium": true,
+    "innovative": true,
+    "trustworthy": true,
+    "sophisticated": true
+  },
+  "keyFeatures": [
+    "AI-powered product discovery",
+    "Automated product listing creation",
+    "Image-based jewelry analysis",
+    "Category-based product organization",
+    "Professional product photography display",
+    "Interactive product galleries"
+  ],
+  "productCategories": [
+    "Rings",
+    "Necklaces",
+    "Earrings",
+    "Bracelets",
+    "Watches",
+    "Brooches",
+    "Sets"
+  ],
+  "technologyStack": [
+    "Next.js 15.3.5",
+    "React 19",
+    "TypeScript",
+    "Tailwind CSS 4",
+    "Supabase",
+    "AI/ML integration",
+    "Vercel deployment"
+  ],
+  "visualBrandElements": {
+    "logo": {
+      "iconType": "Gem (Lucide React)",
+      "style": "Modern minimalist with gradient background",
+      "colors": "Amber gradient (amber-500 to amber-600)"
+    },
+    "iconography": {
+      "primary": "💎 (Diamond emoji)",
+      "secondary": "Lucide React icons (Gem, Upload, ShoppingBag, Heart, Eye, Search)"
+    },
+    "designStyle": {
+      "aesthetic": "Modern luxury with clean lines",
+      "approach": "Component-based design system",
+      "spacing": "Generous whitespace with rounded corners",
+      "shadows": "Layered shadow system for depth",
+      "animations": "Smooth transitions and hover effects"
+    }
+  },
+  "userExperience": {
+    "uploadFlow": "Drag-and-drop with AI processing",
+    "productDisplay": "Grid layout with interactive galleries",
+    "navigation": "Category-based filtering system",
+    "interactions": "Hover effects, image carousels, heart favorites"
+  },
+  "aiIntegration": {
+    "features": [
+      "Automated product description generation",
+      "Image analysis and categorization",
+      "Product grouping by similarity",
+      "Price estimation",
+      "Material identification"
+    ]
+  }
+}

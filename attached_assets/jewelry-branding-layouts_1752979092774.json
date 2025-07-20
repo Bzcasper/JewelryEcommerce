@@ -1,0 +1,142 @@
+{
+  "layoutSystem": {
+    "framework": "Tailwind CSS 4",
+    "approach": "Mobile-first responsive design",
+    "gridSystem": "CSS Grid and Flexbox",
+    "spacing": "Tailwind spacing scale (4px increments)"
+  },
+  "containerSystem": {
+    "maxWidth": "container mx-auto",
+    "padding": "px-4 (16px horizontal)",
+    "responsive": "Fluid width with max constraints"
+  },
+  "gridLayouts": {
+    "productGrid": {
+      "mobile": "grid-cols-1 (1 column)",
+      "tablet": "sm:grid-cols-2 (2 columns)",
+      "desktop": "lg:grid-cols-3 (3 columns)",
+      "large": "xl:grid-cols-4 (4 columns)",
+      "gap": "gap-6 (24px)",
+      "usage": "Main product display grid"
+    },
+    "imageGrid": {
+      "mobile": "grid-cols-2",
+      "tablet": "sm:grid-cols-3",
+      "desktop": "md:grid-cols-4",
+      "gap": "gap-4 (16px)",
+      "usage": "Upload modal image previews"
+    },
+    "categoryGrid": {
+      "layout": "flex flex-wrap",
+      "gap": "gap-3 (12px)",
+      "usage": "Category filter buttons"
+    }
+  },
+  "componentLayouts": {
+    "header": {
+      "structure": "Sticky header with backdrop blur",
+      "positioning": "sticky top-0 z-50",
+      "background": "bg-white/80 backdrop-blur-md",
+      "padding": "py-4 px-4",
+      "border": "border-b border-slate-200",
+      "layout": "flex items-center justify-between",
+      "sections": {
+        "logo": "flex items-center space-x-3",
+        "navigation": "hidden md:flex items-center space-x-8",
+        "actions": "flex items-center space-x-4"
+      }
+    },
+    "productCard": {
+      "structure": "Rounded card with image and content sections",
+      "background": "bg-white rounded-2xl",
+      "shadow": "shadow-lg hover:shadow-xl",
+      "transition": "transition-all duration-300",
+      "overflow": "overflow-hidden",
+      "sections": {
+        "image": "relative aspect-square overflow-hidden",
+        "content": "p-4",
+        "actions": "absolute positioning for overlay buttons"
+      }
+    },
+    "modal": {
+      "backdrop": "fixed inset-0 bg-black/50 backdrop-blur-sm z-50",
+      "positioning": "flex items-center justify-center p-4",
+      "container": "bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh]",
+      "overflow": "overflow-hidden",
+      "sections": {
+        "header": "p-6 border-b border-slate-200",
+        "content": "p-6 max-h-[calc(90vh-120px)] overflow-y-auto"
+      }
+    }
+  },
+  "spacingSystem": {
+    "sections": "py-8 (32px vertical)",
+    "cards": "p-4 to p-6 (16-24px)",
+    "elements": "space-x-3, space-y-4 (12-16px)",
+    "buttons": "px-4 py-2 to px-6 py-3",
+    "margins": "mb-4, mb-6, mb-8, mb-12 (16-48px)"
+  },
+  "responsiveBreakpoints": {
+    "sm": "640px (tablet)",
+    "md": "768px (desktop)",
+    "lg": "1024px (large desktop)",
+    "xl": "1280px (extra large)"
+  },
+  "layoutPatterns": {
+    "heroSection": {
+      "structure": "text-center mb-12",
+      "content": "Centered title, subtitle, and description",
+      "maxWidth": "max-w-2xl mx-auto",
+      "spacing": "mb-4 between elements"
+    },
+    "mainContent": {
+      "structure": "container mx-auto px-4 py-8",
+      "sections": "Hero → Filters → Products/Content"
+    },
+    "emptyState": {
+      "structure": "text-center py-20",
+      "elements": "Icon → Title → Description → CTA Button",
+      "spacing": "Generous vertical spacing"
+    }
+  },
+  "navigationLayout": {
+    "desktop": {
+      "style": "Horizontal navigation bar",
+      "items": "Collections, About, Contact",
+      "spacing": "space-x-8"
+    },
+    "mobile": {
+      "style": "Hidden on small screens (hidden md:flex)",
+      "alternative": "Hamburger menu (not implemented)"
+    }
+  },
+  "cardDesign": {
+    "aspectRatio": "aspect-square for images",
+    "borderRadius": "rounded-2xl (16px)",
+    "shadows": "Layered shadow system",
+    "hover": "Scale and shadow effects",
+    "overlay": "Absolute positioned action buttons",
+    "badges": "Floating category and material tags"
+  },
+  "formLayouts": {
+    "uploadArea": {
+      "style": "Drag and drop zone",
+      "border": "border-2 border-dashed",
+      "padding": "p-8",
+      "alignment": "text-center",
+      "states": "Visual feedback for drag states"
+    },
+    "buttonGroups": {
+      "spacing": "space-x-4",
+      "alignment": "flex items-center justify-end",
+      "responsive": "Stacked on mobile if needed"
+    }
+  },
+  "zIndexSystem": {
+    "backdrop": "z-50 (modals)",
+    "header": "z-50 (sticky header)",
+    "overlay": "z-40 (card overlays)",
+    "dropdown": "z-30 (dropdowns)",
+    "normal": "z-0 (default content)"
+  }
+}

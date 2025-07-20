@@ -1,0 +1,78 @@
+Email & Form Templates - Drugga Jewelry
+1. Order Confirmation Email Template
+Features:
+
+Header: Clean logo with brand colors and tagline
+Order Details: Product images, descriptions, prices
+Tracking Information: Shipping carrier and tracking number
+Call-to-Action: "Track Your Order" button
+Customer Service: Contact information for support
+Professional Footer: Company details and unsubscribe options
+
+2. Newsletter Template - "Weekly Treasures"
+Features:
+
+Hero Section: Featured collection with compelling copy
+Product Showcase: 3-product grid with images and pricing
+Editorial Content: "Collector's Spotlight" educational section
+Authentication Badge: Trust signal highlighting expert verification
+Social Media: Follow links and engagement
+Professional Layout: Clean, scannable design
+
+3. Login Form
+Features:
+
+Branded Header: Logo and welcome messaging
+Clean Form Fields: Email and password with modern styling
+User Experience: Remember me, forgot password, show/hide password
+Primary CTA: Bold "Sign In" button
+Alternative Login: Google sign-in option
+Account Creation: Link to sign-up form
+
+4. Sign Up Form
+Features:
+
+Extended Form: First name, last name, email, password fields
+Password Requirements: Clear guidelines for security
+Marketing Opt-ins: Newsletter subscription checkbox
+Legal Compliance: Terms of service and privacy policy agreement
+Account Creation: "Create Account" primary button
+Login Redirect: Link for existing users
+
+5. Welcome Email Template
+Features:
+
+Warm Welcome: Personal greeting and community messaging
+Member Benefits: Three key value propositions with icons
+Special Offer: 15% welcome discount with promo code
+Call-to-Action: "Start Shopping" button
+Support Information: Customer service contact details
+
+Design Consistency Features:
+Color Palette:
+
+Pearl Off-White: #F8F6F0 (backgrounds)
+Charcoal: #2D2D2D (primary text)
+Deep Red: #8B0000 (CTAs and accents)
+Warm Tans: #C4A484, #8B7355 (supporting elements)
+
+Typography:
+
+Sans-serif fonts for modern, clean readability
+Consistent hierarchy with proper font weights
+Letter spacing for elegant, luxury feel
+
+Brand Elements:
+
+Hexagonal logo with geometric center
+Authentication badges for trust building
+Consistent button styling with rounded corners
+Professional layout grid with proper spacing
+
+User Experience:
+
+Mobile-responsive design considerations
+Clear call-to-actions with contrasting colors
+Form validation visual cues
+Trust signals prominently displayed
+Clean, scannable layouts for easy reading
