@@ -72,11 +72,11 @@ export default function Footer() {
               </svg>
             </div>
             <div>
-              <h5 className="font-bold text-white">Drugga</h5>
-              <p className="text-xs text-warm-tan">Curated Vintage Jewelry</p>
+              <h5 className="font-bold text-white">Luxury Jewelry</h5>
+              <p className="text-xs text-warm-tan">Premium Collection</p>
             </div>
           </div>
-          <p className="text-sm text-warm-tan">© 2024 Drugga. All rights reserved.</p>
+          <p className="text-sm text-warm-tan">© 2024 Luxury Jewelry. All rights reserved.</p>
         </div>
       </div>
     </footer>

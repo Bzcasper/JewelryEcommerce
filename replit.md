@@ -1,8 +1,8 @@
-# DRUGGA Jewelry Platform - Replit Development Guide
+# Luxury Jewelry Platform - Replit Development Guide
 
 ## Overview
 
-DRUGGA Jewelry is a sophisticated pre-owned jewelry e-commerce platform specializing in authenticated vintage and designer pieces. The platform features AI-powered analysis for authentication, valuation, and automated product listing creation. Built with modern web technologies, it provides a premium shopping experience for jewelry enthusiasts.
+A sophisticated pre-owned jewelry e-commerce platform specializing in authenticated vintage and designer pieces. The platform features AI-powered analysis for authentication, valuation, and automated product listing creation. Built with modern web technologies, it provides a premium shopping experience for jewelry enthusiasts.
 
 ## User Preferences
 
@@ -41,6 +41,20 @@ The system uses PostgreSQL with the following core entities:
 - **Users**: User profiles and authentication data
 - **Sessions**: PostgreSQL-based session storage
 
+## Recent Changes
+
+### Code Refactoring (January 2025)
+- Successfully removed all "Drugga Curated Vintage Jewelry" branding from codebase
+- Refactored `AIUpload.tsx` from 504 lines into 6 modular components for better maintainability:
+  - `FileUploadArea.tsx` - File upload and preview component
+  - `AnalysisForm.tsx` - Form fields for jewelry analysis
+  - `AnalysisStatusCard.tsx` - Current analysis status display
+  - `TipsCards.tsx` - Photography tips and AI process information
+  - `RecentAnalysesList.tsx` - Recent analyses history
+  - `useFileUpload.ts` - Custom hook for file handling logic
+- Maintained `sidebar.tsx` as a complete UI library component (771 lines is appropriate for its comprehensive functionality)
+- All existing functionality preserved while improving code organization and maintainability
+
 ## Key Components
 
 ### Authentication System
@@ -68,6 +82,7 @@ The system uses PostgreSQL with the following core entities:
 - **Analysis Pipeline**: AI-powered authentication, valuation, and categorization
 - **Progress Tracking**: Real-time upload and analysis progress indicators
 - **Result Management**: Structured analysis results with export capabilities
+- **Modular Components**: Refactored into focused, reusable components for better maintainability
 
 ## Data Flow
 

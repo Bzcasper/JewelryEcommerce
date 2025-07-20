@@ -50,8 +50,8 @@ export default function Header() {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-charcoal tracking-wide">Drugga</h1>
-              <p className="text-xs text-warm-tan-dark">Curated Vintage Jewelry</p>
+              <h1 className="text-xl font-bold text-charcoal tracking-wide">Luxury Jewelry</h1>
+              <p className="text-xs text-warm-tan-dark">Premium Collection</p>
             </div>
           </Link>
 

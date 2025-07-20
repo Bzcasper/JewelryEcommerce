@@ -53,8 +53,8 @@ export default function Homepage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
               <h2 className="text-4xl lg:text-5xl font-bold text-charcoal mb-6 leading-tight">
-                Curated Vintage<br />
-                <span className="text-deep-red">Jewelry</span>
+                Premium<br />
+                <span className="text-deep-red">Jewelry Collection</span>
               </h2>
               <p className="text-lg text-warm-tan-dark mb-8 leading-relaxed">
                 Discover authenticated pre-owned luxury jewelry pieces. Each item is expertly verified for authenticity and quality, bringing you sustainable luxury with confidence.

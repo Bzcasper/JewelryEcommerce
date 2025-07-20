@@ -1,11 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import url('@assets/jewelry-store-variables_1752979092775.css');
 @import url('@assets/jewelry-store-utilities_1752979092774.css');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  /* Drugga Jewelry Brand Colors */
+  /* Luxury Jewelry Brand Colors */
   --background: hsl(47, 52%, 96%); /* Pearl Off-White #F8F6F0 */
   --foreground: hsl(0, 0%, 18%); /* Charcoal #2D2D2D */
   --muted: hsl(47, 52%, 95%);
@@ -27,7 +28,7 @@
   --ring: hsl(0, 0%, 18%);
   --radius: 0.5rem;
   
-  /* Custom Drugga Colors */
+  /* Custom Brand Colors */
   --pearl: hsl(47, 52%, 96%);
   --charcoal: hsl(0, 0%, 18%);
   --deep-red: hsl(0, 100%, 27%);
@@ -68,7 +69,7 @@
   }
 }
 
-/* Custom Drugga Styles */
+/* Custom Brand Styles */
 .hexagon {
   width: 40px;
   height: 34.64px;
