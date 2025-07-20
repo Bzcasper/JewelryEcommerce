@@ -18,6 +18,9 @@ interface ProductModalProps {
 }
 
 export default function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
+  // Early return MUST happen before any hooks are called
+  if (!product) return null;
+
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -25,8 +28,6 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuth();
-
-  if (!product) return null;
 
   const images = [product.mainImageUrl, ...(product.imageUrls || [])].filter(Boolean);
   const availableSizes = product.size ? [product.size] : ['6', '6.5', '7', '7.5', '8'];
