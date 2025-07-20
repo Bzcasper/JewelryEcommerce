@@ -1,0 +1,28 @@
+[vite] connecting...
+[vite] connected.
+Warning: Internal React error: Expected static flag was missing. Please notify the React team.
+    at ProductModal (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/src/components/ProductModal.tsx:29:40)
+    at div
+    at ProductListing (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/src/pages/ProductListing.tsx:33:22)
+    at Route (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=31882d07:323:16)
+    at Switch (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=31882d07:379:17)
+    at Router (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/src/App.tsx?v=KUiq_BuIpACr_7WrmM7ex:32:42)
+    at Provider (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-PLT6GTVM.js?v=31882d07:38:15)
+    at TooltipProvider (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=31882d07:61:5)
+    at QueryClientProvider (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=31882d07:2805:3)
+    at App
+at ProductModal (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/src/components/ProductModal.tsx:29:40)
+at div
+at ProductListing (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/src/pages/ProductListing.tsx:33:22)
+at Route (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=31882d07:323:16)
+at Switch (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=31882d07:379:17)
+at Router (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/src/App.tsx?v=KUiq_BuIpACr_7WrmM7ex:32:42)
+at Provider (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-PLT6GTVM.js?v=31882d07:38:15)
+at TooltipProvider (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=31882d07:61:5)
+at QueryClientProvider (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=31882d07:2805:3)
+at App
+at t.value (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://999e311a-760d-446a-871e-cc67c9d1d956-00-1l19nqf6pt6gz.worf.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
