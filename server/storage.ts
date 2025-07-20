@@ -378,6 +378,135 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return updated;
   }
+
+  // Seed function to initialize database with sample data
+  async seedSampleData(): Promise<void> {
+    try {
+      // Check if data already exists
+      const existingCategories = await this.getCategories();
+      if (existingCategories.length > 0) {
+        return; // Data already seeded
+      }
+
+      // Create categories
+      const categories = await Promise.all([
+        this.createCategory({ name: 'Rings', slug: 'rings' }),
+        this.createCategory({ name: 'Necklaces', slug: 'necklaces' }),
+        this.createCategory({ name: 'Earrings', slug: 'earrings' }),
+        this.createCategory({ name: 'Bracelets', slug: 'bracelets' }),
+        this.createCategory({ name: 'Watches', slug: 'watches' })
+      ]);
+
+      // Create brands
+      const brands = await Promise.all([
+        this.createBrand({ name: 'Tiffany & Co.' }),
+        this.createBrand({ name: 'Cartier' }),
+        this.createBrand({ name: 'Van Cleef & Arpels' }),
+        this.createBrand({ name: 'Bulgari' }),
+        this.createBrand({ name: 'David Yurman' })
+      ]);
+
+      // Create eras
+      const eras = await Promise.all([
+        this.createEra({ name: 'Vintage 1950s', period: '1950-1959' }),
+        this.createEra({ name: 'Vintage 1960s', period: '1960-1969' }),
+        this.createEra({ name: 'Contemporary', period: '2000-present' }),
+        this.createEra({ name: 'Art Deco', period: '1920-1940' }),
+        this.createEra({ name: 'Victorian', period: '1837-1901' })
+      ]);
+
+      // Create materials
+      const materials = await Promise.all([
+        this.createMaterial({ name: 'Gold' }),
+        this.createMaterial({ name: 'Silver' }),
+        this.createMaterial({ name: 'Platinum' }),
+        this.createMaterial({ name: 'Diamond' }),
+        this.createMaterial({ name: 'Pearl' })
+      ]);
+
+      // Create sample products with real web images
+      const sampleProducts = [
+        {
+          title: 'Diamond Solitaire Ring',
+          description: 'Elegant 1-carat diamond solitaire ring in platinum setting',
+          price: '8500.00',
+          condition: 'Excellent',
+          mainImageUrl: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          categoryId: categories[0].id,
+          brandId: brands[0].id,
+          eraId: eras[2].id,
+          featured: true,
+          inStock: true
+        },
+        {
+          title: 'Pearl Necklace',
+          description: 'Classic strand of cultured pearls with 14k gold clasp',
+          price: '2200.00',
+          condition: 'Very Good',
+          mainImageUrl: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          categoryId: categories[1].id,
+          brandId: brands[1].id,
+          eraId: eras[0].id,
+          featured: true,
+          inStock: true
+        },
+        {
+          title: 'Emerald Drop Earrings',
+          description: 'Stunning emerald and diamond drop earrings in white gold',
+          price: '5800.00',
+          condition: 'Excellent',
+          mainImageUrl: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          categoryId: categories[2].id,
+          brandId: brands[2].id,
+          eraId: eras[2].id,
+          featured: false,
+          inStock: true
+        },
+        {
+          title: 'Tennis Bracelet',
+          description: 'Diamond tennis bracelet with 2.5 carats total weight',
+          price: '12000.00',
+          condition: 'Excellent',
+          mainImageUrl: 'https://images.unsplash.com/photo-1506629905607-bb5199dd18ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          categoryId: categories[3].id,
+          brandId: brands[3].id,
+          eraId: eras[2].id,
+          featured: true,
+          inStock: true
+        },
+        {
+          title: 'Vintage Gold Watch',
+          description: 'Luxury vintage gold watch with leather strap',
+          price: '15500.00',
+          condition: 'Very Good',
+          mainImageUrl: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          categoryId: categories[4].id,
+          brandId: brands[1].id,
+          eraId: eras[1].id,
+          featured: true,
+          inStock: true
+        },
+        {
+          title: 'Art Deco Sapphire Ring',
+          description: 'Gorgeous Art Deco sapphire ring with diamond accents',
+          price: '6800.00',
+          condition: 'Good',
+          mainImageUrl: 'https://images.unsplash.com/photo-1635767798638-3e25273a8236?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+          categoryId: categories[0].id,
+          brandId: brands[4].id,
+          eraId: eras[3].id,
+          featured: false,
+          inStock: true
+        }
+      ];
+
+      await Promise.all(sampleProducts.map(product => this.createProduct(product)));
+      
+      console.log('✓ Sample jewelry data seeded successfully');
+    } catch (error) {
+      console.error('Error seeding sample data:', error);
+    }
+  }
 }
 
 export const storage = new DatabaseStorage();

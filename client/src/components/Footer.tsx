@@ -7,13 +7,13 @@ export default function Footer() {
         <div className="grid md:grid-cols-5 gap-8">
           {/* About */}
           <div>
-            <h4 className="font-semibold mb-4">About Drugga</h4>
+            <h4 className="font-semibold mb-4">About</h4>
             <ul className="space-y-2 text-sm text-warm-tan">
-              <li><Link href="/about" className="hover:text-white transition-colors">Our Story</Link></li>
-              <li><Link href="/authentication" className="hover:text-white transition-colors">Authentication</Link></li>
-              <li><Link href="/sustainability" className="hover:text-white transition-colors">Sustainability</Link></li>
-              <li><Link href="/press" className="hover:text-white transition-colors">Press</Link></li>
-              <li><Link href="/careers" className="hover:text-white transition-colors">Careers</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Our Story</Link></li>
+              <li><Link href="/upload" className="hover:text-white transition-colors">Authentication</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Sustainability</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Press</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Careers</Link></li>
             </ul>
           </div>
 
@@ -21,11 +21,11 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Customer Care</h4>
             <ul className="space-y-2 text-sm text-warm-tan">
-              <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-              <li><Link href="/size-guide" className="hover:text-white transition-colors">Size Guide</Link></li>
-              <li><Link href="/care" className="hover:text-white transition-colors">Care Instructions</Link></li>
-              <li><Link href="/returns" className="hover:text-white transition-colors">Returns</Link></li>
-              <li><Link href="/shipping" className="hover:text-white transition-colors">Shipping</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Contact Us</Link></li>
+              <li><Link href="/products" className="hover:text-white transition-colors">Size Guide</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Care Instructions</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Returns</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Shipping</Link></li>
             </ul>
           </div>
 
@@ -33,10 +33,10 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Sell With Us</h4>
             <ul className="space-y-2 text-sm text-warm-tan">
-              <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
-              <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-              <li><Link href="/accepted-items" className="hover:text-white transition-colors">Accepted Items</Link></li>
-              <li><Link href="/seller-faq" className="hover:text-white transition-colors">Seller FAQ</Link></li>
+              <li><Link href="/upload" className="hover:text-white transition-colors">How It Works</Link></li>
+              <li><Link href="/upload" className="hover:text-white transition-colors">Pricing</Link></li>
+              <li><Link href="/upload" className="hover:text-white transition-colors">Accepted Items</Link></li>
+              <li><Link href="/upload" className="hover:text-white transition-colors">Seller FAQ</Link></li>
             </ul>
           </div>
 
@@ -44,10 +44,10 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Connect</h4>
             <ul className="space-y-2 text-sm text-warm-tan">
-              <li><a href="https://instagram.com" className="hover:text-white transition-colors">Instagram</a></li>
-              <li><a href="https://facebook.com" className="hover:text-white transition-colors">Facebook</a></li>
-              <li><a href="https://pinterest.com" className="hover:text-white transition-colors">Pinterest</a></li>
-              <li><Link href="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>
+              <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a></li>
+              <li><a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Facebook</a></li>
+              <li><a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Pinterest</a></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Newsletter</Link></li>
             </ul>
           </div>
 
@@ -55,10 +55,10 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Legal</h4>
             <ul className="space-y-2 text-sm text-warm-tan">
-              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link href="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link></li>
-              <li><Link href="/accessibility" className="hover:text-white transition-colors">Accessibility</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Cookie Policy</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">Accessibility</Link></li>
             </ul>
           </div>
         </div>
