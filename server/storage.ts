@@ -202,7 +202,7 @@ export class DatabaseStorage implements IStorage {
 
     if (filters.search) {
       conditions.push(
-        sql`${products.title} ILIKE ${'%' + filters.search + '%'} OR ${products.description} ILIKE ${'%' + filters.search + '%'}`
+        sql`${products.title} ILIKE ${`%${filters.search}%`} OR ${products.description} ILIKE ${`%${filters.search}%`}`
       );
     }
 
