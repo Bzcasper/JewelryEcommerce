@@ -50,7 +50,7 @@ export default function AnalysisForm({
             <SelectValue placeholder="Unknown" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Unknown</SelectItem>
+            <SelectItem value="unknown">Unknown</SelectItem>
             <SelectItem value="victorian">Victorian (1837-1901)</SelectItem>
             <SelectItem value="edwardian">Edwardian (1901-1915)</SelectItem>
             <SelectItem value="artdeco">Art Deco (1920s-1930s)</SelectItem>
