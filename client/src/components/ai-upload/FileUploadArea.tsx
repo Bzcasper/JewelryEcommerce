@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Camera } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
+import { QuickPreview } from '@/components/ui/quick-preview';
 
 interface UploadedFile {
   file: File;
@@ -84,19 +85,39 @@ export default function FileUploadArea({
       {files.length > 0 && (
         <div className="grid grid-cols-3 gap-4">
           {files.map((file) => (
-            <div key={file.id} className="relative">
-              <img
-                src={file.preview}
-                alt="Upload preview"
-                className="w-full h-24 object-cover rounded-lg"
-              />
+            <div key={file.id} className="relative group">
+              <div className="relative overflow-hidden rounded-lg">
+                <img
+                  src={file.preview}
+                  alt="Upload preview"
+                  className="w-full h-24 object-cover transition-transform duration-200 group-hover:scale-110"
+                />
+                
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200" />
+                
+                {/* Quick preview indicator */}
+                <div className="absolute bottom-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="bg-white/90 backdrop-blur-sm rounded px-2 py-1">
+                    <span className="text-xs font-medium text-charcoal">Hover to preview</span>
+                  </div>
+                </div>
+              </div>
+              
               <button
                 type="button"
                 onClick={() => onRemoveFile(file.id)}
-                className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-sm hover:bg-red-600"
+                className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-sm hover:bg-red-600 z-10"
               >
                 ×
               </button>
+              
+              {/* Quick Preview on Hover */}
+              <QuickPreview
+                src={file.preview}
+                alt={`Jewelry preview ${file.id}`}
+                triggerClassName="absolute inset-0"
+              />
             </div>
           ))}
         </div>

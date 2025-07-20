@@ -2,6 +2,7 @@ import { Heart, ShoppingCart, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import AuthenticationBadge from './AuthenticationBadge';
+import { QuickPreview } from '@/components/ui/quick-preview';
 import type { Product } from '@shared/schema';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
@@ -114,11 +115,20 @@ export default function ProductCard({ product, onOpenModal }: ProductCardProps) 
   return (
     <Card className="product-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer group">
       <div className="relative" onClick={() => onOpenModal(product)}>
-        <img
-          src={product.mainImageUrl || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400'}
-          alt={product.title}
-          className="w-full h-64 object-cover"
-        />
+        {/* Image with Quick Preview */}
+        <div className="relative">
+          <img
+            src={product.mainImageUrl || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400'}
+            alt={product.title}
+            className="w-full h-64 object-cover"
+          />
+          <QuickPreview
+            src={product.mainImageUrl || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400'}
+            alt={`${product.title} preview`}
+            triggerClassName="absolute inset-0"
+            delay={200}
+          />
+        </div>
         
         {product.authenticated && (
           <div className="absolute top-3 left-3">
