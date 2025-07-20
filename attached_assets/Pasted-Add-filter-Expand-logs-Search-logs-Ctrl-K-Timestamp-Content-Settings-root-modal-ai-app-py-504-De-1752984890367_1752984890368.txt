@@ -1,0 +1,156 @@
+Add filter
+Expand logs
+Search logs (Ctrl-K)
+Timestamp
+Content
+Settings
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+INFO:faiss.loader:Loading faiss with AVX512-SPR support.
+INFO:faiss.loader:Could not load library with AVX512-SPR support due to:
+ModuleNotFoundError("No module named 'faiss.swigfaiss_avx512_spr'")
+INFO:faiss.loader:Loading faiss with AVX512 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX512 support.
+INFO:faiss:Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+INFO:jewelry-ai-app:Loading CLIP model...
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+WARNING:jewelry-ai-app:Models not loaded, attempting to load within function.
+INFO:jewelry-ai-app:Loading CLIP model...
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+ERROR:jewelry-ai-app:Error analyzing image: 'NoneType' object is not callable
+   POST /analyze-image -> 200 OK  (duration: 16.2 s, execution: 2.70 s)
+WARNING:jewelry-ai-app:Models not loaded, attempting to load within function.
+INFO:jewelry-ai-app:Loading CLIP model...
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+ERROR:jewelry-ai-app:Error analyzing image: 'NoneType' object is not callable
+   POST /analyze-image -> 200 OK  (duration: 745.2 ms, execution: 675.4 ms)
+    GET /health -> 200 OK  (duration: 71.1 ms, execution: 13.5 ms)
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+INFO:faiss.loader:Loading faiss with AVX512 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX512 support.
+INFO:faiss:Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+    GET /index-stats -> 200 OK  (duration: 3.31 s, execution: 3.24 s)
+WARNING:jewelry-ai-app:Models not loaded, attempting to load within function.
+INFO:jewelry-ai-app:Loading CLIP model...
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+ERROR:jewelry-ai-app:Error analyzing image: 'NoneType' object is not callable
+   POST /analyze-image -> 200 OK  (duration: 664.2 ms, execution: 607.4 ms)
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+INFO:faiss.loader:Loading faiss with AVX512-SPR support.
+INFO:faiss.loader:Could not load library with AVX512-SPR support due to:
+ModuleNotFoundError("No module named 'faiss.swigfaiss_avx512_spr'")
+INFO:faiss.loader:Loading faiss with AVX512 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX512 support.
+INFO:faiss:Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+INFO:jewelry-ai-app:Loading CLIP model...
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+    GET / -> 404 Not Found  (duration: 9.16 s, execution: 13.8 ms)
+    GET /favicon.ico -> 404 Not Found  (duration: 66.9 ms, execution: 12.9 ms)
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+INFO:faiss.loader:Loading faiss with AVX512-SPR support.
+INFO:faiss.loader:Could not load library with AVX512-SPR support due to:
+ModuleNotFoundError("No module named 'faiss.swigfaiss_avx512_spr'")
+INFO:faiss.loader:Loading faiss with AVX512 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX512 support.
+INFO:faiss:Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+INFO:jewelry-ai-app:Loading CLIP model...
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+    GET /docs -> 200 OK  (duration: 11.1 s, execution: 85.6 ms)
+    GET /openapi.json -> 200 OK  (duration: 230.2 ms, execution: 83.1 ms)
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+WARNING:jewelry-ai-app:Models not loaded, attempting to load within function.
+INFO:jewelry-ai-app:Loading CLIP model...
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+ERROR:jewelry-ai-app:Error analyzing image: Incorrect padding
+   POST /analyze-image -> 200 OK  (duration: 3.55 s, execution: 3.41 s)
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+INFO:faiss.loader:Loading faiss with AVX512 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX512 support.
+INFO:faiss:Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+   POST /find-similar -> 200 OK  (duration: 2.33 s, execution: 2.20 s)
+   POST /add-product -> 500 Internal Server Error  (duration: 283.5 ms, execution: 152.8 ms)
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+INFO:faiss.loader:Loading faiss with AVX512 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX512 support.
+INFO:faiss:Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+    GET /index-stats -> 200 OK  (duration: 2.35 s, execution: 2.23 s)
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+INFO:faiss.loader:Loading faiss with AVX512-SPR support.
+INFO:faiss.loader:Could not load library with AVX512-SPR support due to:
+ModuleNotFoundError("No module named 'faiss.swigfaiss_avx512_spr'")
+INFO:faiss.loader:Loading faiss with AVX512 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX512 support.
+INFO:faiss:Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+INFO:jewelry-ai-app:Loading CLIP model...
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+/root/modal_ai_app.py:504: DeprecationError: 2025-04-09: The `allow_concurrent_inputs` parameter is deprecated. Please use the `@modal.concurrent` decorator instead.
+
+See https://modal.com/docs/guide/modal-1-0-migration for more information.
+  @app.function(
+WARNING:jewelry-ai-app:Models not loaded, attempting to load within function.
+INFO:jewelry-ai-app:Loading CLIP model...
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+ERROR:jewelry-ai-app:Error analyzing image: 'NoneType' object is not callable
+   POST /analyze-image -> 200 OK  (duration: 11.3 s, execution: 2.31 s)
+WARNING:jewelry-ai-app:Models not loaded, attempting to load within function.
+INFO:jewelry-ai-app:Loading CLIP model...
+INFO:jewelry-ai-app:Loaded CLIP model from cache
+INFO:jewelry-ai-app:Created new Faiss index
+ERROR:jewelry-ai-app:Error analyzing image: 'NoneType' object is not callable
+   POST /analyze-image -> 200 OK  (duration: 512.4 ms, execution: 448.4 ms)
