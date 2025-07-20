@@ -26,25 +26,24 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuth();
   
-  // Check if product exists after hooks
-  if (!product) return null;
-
-  const images = [product.mainImageUrl, ...(product.imageUrls || [])].filter(Boolean);
-  const availableSizes = product.size ? [product.size] : ['6', '6.5', '7', '7.5', '8'];
+  // Handle the null case in JSX to avoid Rules of Hooks violations
+  const images = product ? [product.mainImageUrl, ...(product.imageUrls || [])].filter(Boolean) : [];
+  const availableSizes = product?.size ? [product.size] : ['6', '6.5', '7', '7.5', '8'];
 
   const addToCartMutation = useMutation({
     mutationFn: async () => {
+      if (!product) throw new Error('No product selected');
       await apiRequest('POST', '/api/cart', {
         productId: product.id,
         quantity,
-        selectedSize: selectedSize || product.size,
+        selectedSize: selectedSize || product?.size,
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/cart'] });
       toast({
         title: "Added to cart",
-        description: `${product.title} has been added to your cart.`,
+        description: `${product?.title || 'Item'} has been added to your cart.`,
       });
       onClose();
     },
@@ -70,6 +69,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
 
   const addToWishlistMutation = useMutation({
     mutationFn: async () => {
+      if (!product) throw new Error('No product selected');
       if (isLiked) {
         await apiRequest('DELETE', `/api/wishlist/${product.id}`);
       } else {
@@ -83,7 +83,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
       queryClient.invalidateQueries({ queryKey: ['/api/wishlist'] });
       toast({
         title: isLiked ? "Removed from wishlist" : "Added to wishlist",
-        description: `${product.title} has been ${isLiked ? 'removed from' : 'added to'} your wishlist.`,
+        description: `${product?.title || 'Item'} has been ${isLiked ? 'removed from' : 'added to'} your wishlist.`,
       });
     },
     onError: (error) => {
@@ -134,17 +134,22 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-auto p-0">
+        {!product ? (
+          <div className="p-8 text-center">
+            <p className="text-warm-tan-dark">Product not found</p>
+          </div>
+        ) : (
         <div className="grid lg:grid-cols-2 gap-0">
           {/* Product Images */}
           <div className="relative">
             <div className="relative">
               <img
                 src={images[selectedImageIndex] || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600'}
-                alt={product.title}
+                alt={product?.title || 'Product'}
                 className="w-full h-96 lg:h-full object-cover"
               />
               
-              {product.authenticated && (
+              {product?.authenticated && (
                 <div className="absolute top-4 left-4">
                   <AuthenticationBadge />
                 </div>
@@ -169,7 +174,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
                     >
                       <img
                         src={image || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100'}
-                        alt={`${product.title} view ${index + 1}`}
+                        alt={`${product?.title || 'Product'} view ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
                     </button>
@@ -183,13 +188,13 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
           <div className="p-8">
             <DialogHeader className="mb-6">
               <DialogTitle className="text-2xl font-bold text-charcoal">
-                {product.title}
+                {product?.title || 'Product Details'}
               </DialogTitle>
               <DialogDescription className="sr-only">
-                View details for {product.title}
+                View details for {product?.title || 'Product'}
               </DialogDescription>
-              <p className="text-warm-tan-dark">{product.condition}</p>
-              {product.authenticated && (
+              <p className="text-warm-tan-dark">{product?.condition}</p>
+              {product?.authenticated && (
                 <div className="mt-2">
                   <AuthenticationBadge />
                 </div>
@@ -197,10 +202,10 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             </DialogHeader>
             
             <div className="text-3xl font-bold text-charcoal mb-6">
-              ${product.price}
-              {product.originalPrice && parseFloat(product.originalPrice) > parseFloat(product.price) && (
+              ${product?.price || '0.00'}
+              {product?.originalPrice && parseFloat(product.originalPrice) > parseFloat(product?.price || '0') && (
                 <span className="text-lg text-warm-tan-dark line-through ml-2">
-                  ${product.originalPrice}
+                  ${product?.originalPrice}
                 </span>
               )}
             </div>
@@ -209,25 +214,25 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             <div className="space-y-3 mb-6">
               <div className="flex justify-between">
                 <span className="text-warm-tan-dark">Condition:</span>
-                <span className="text-charcoal font-medium">{product.condition}</span>
+                <span className="text-charcoal font-medium">{product?.condition || 'Unknown'}</span>
               </div>
-              {product.size && (
+              {product?.size && (
                 <div className="flex justify-between">
                   <span className="text-warm-tan-dark">Size:</span>
-                  <span className="text-charcoal font-medium">{product.size}</span>
+                  <span className="text-charcoal font-medium">{product?.size}</span>
                 </div>
               )}
             </div>
 
             {/* Description */}
-            {product.description && (
+            {product?.description && (
               <p className="text-warm-tan-dark text-sm mb-6 leading-relaxed">
-                {product.description}
+                {product?.description}
               </p>
             )}
 
             {/* Size Selector */}
-            {product.resizable && (
+            {product?.resizable && (
               <div className="mb-6">
                 <h4 className="font-medium text-charcoal mb-3">Size Options</h4>
                 <div className="flex gap-2">
@@ -347,6 +352,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
             </div>
           </div>
         </div>
+        )}
       </DialogContent>
     </Dialog>
   );
