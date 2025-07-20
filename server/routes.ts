@@ -399,6 +399,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Stripe checkout routes
+  app.post("/api/checkout/create-payment-intent", isAuthenticated, async (req: any, res) => {
+    try {
+      const { amount, orderId } = req.body;
+      
+      if (!amount || amount < 50) {
+        return res.status(400).json({ message: "Invalid amount" });
+      }
+
+      // Mock payment intent for now since Stripe isn't configured
+      // In production, you would use: const paymentIntent = await stripe.paymentIntents.create(...)
+      const mockPaymentIntent = {
+        clientSecret: `pi_mock_${Date.now()}_secret_${Math.random().toString(36).substring(7)}`,
+        amount,
+        currency: 'usd',
+        status: 'requires_payment_method'
+      };
+
+      res.json({ 
+        clientSecret: mockPaymentIntent.clientSecret,
+        amount: mockPaymentIntent.amount 
+      });
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+      res.status(500).json({ message: "Failed to create payment intent" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

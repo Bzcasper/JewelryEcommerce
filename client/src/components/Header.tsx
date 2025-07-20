@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useAuth } from '@/hooks/useAuth';
 import { Badge } from '@/components/ui/badge';
 import { useQuery } from '@tanstack/react-query';
+import SearchBar from '@/components/SearchBar';
 
 export default function Header() {
   const [location, setLocation] = useLocation();
@@ -70,19 +71,10 @@ export default function Header() {
 
           {/* Search & Actions */}
           <div className="flex items-center space-x-4">
-            {/* Search */}
-            <form onSubmit={handleSearch} className="hidden sm:flex">
-              <div className="relative">
-                <Input
-                  type="text"
-                  placeholder="Search jewelry..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-64 pl-10 pr-4 bg-white/80"
-                />
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-warm-tan-dark h-4 w-4" />
-              </div>
-            </form>
+            {/* Search with Algolia */}
+            <div className="hidden sm:block">
+              <SearchBar />
+            </div>
 
             <Button variant="ghost" size="sm" className="sm:hidden">
               <Search className="h-5 w-5" />
