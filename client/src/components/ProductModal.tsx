@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { X, Heart, ShoppingCart, Share2, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import AuthenticationBadge from './AuthenticationBadge';
 import type { Product } from '@shared/schema';
@@ -18,9 +18,6 @@ interface ProductModalProps {
 }
 
 export default function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
-  // Early return MUST happen before any hooks are called
-  if (!product) return null;
-
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -28,6 +25,9 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuth();
+  
+  // Check if product exists after hooks
+  if (!product) return null;
 
   const images = [product.mainImageUrl, ...(product.imageUrls || [])].filter(Boolean);
   const availableSizes = product.size ? [product.size] : ['6', '6.5', '7', '7.5', '8'];
@@ -185,6 +185,9 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
               <DialogTitle className="text-2xl font-bold text-charcoal">
                 {product.title}
               </DialogTitle>
+              <DialogDescription className="sr-only">
+                View details for {product.title}
+              </DialogDescription>
               <p className="text-warm-tan-dark">{product.condition}</p>
               {product.authenticated && (
                 <div className="mt-2">
