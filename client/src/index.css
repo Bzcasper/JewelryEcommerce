@@ -1,0 +1,254 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('@assets/jewelry-store-variables_1752979092775.css');
+@import url('@assets/jewelry-store-utilities_1752979092774.css');
+
+:root {
+  /* Drugga Jewelry Brand Colors */
+  --background: hsl(47, 52%, 96%); /* Pearl Off-White #F8F6F0 */
+  --foreground: hsl(0, 0%, 18%); /* Charcoal #2D2D2D */
+  --muted: hsl(47, 52%, 95%);
+  --muted-foreground: hsl(32, 20%, 60%); /* Warm Tan Dark #8B7355 */
+  --popover: hsl(47, 52%, 96%);
+  --popover-foreground: hsl(0, 0%, 18%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(0, 0%, 18%);
+  --border: hsl(32, 36%, 76%); /* Warm Tan #C4A484 */
+  --input: hsl(32, 36%, 76%);
+  --primary: hsl(0, 100%, 27%); /* Deep Red #8B0000 */
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(47, 52%, 95%);
+  --secondary-foreground: hsl(0, 0%, 9%);
+  --accent: hsl(47, 52%, 95%);
+  --accent-foreground: hsl(0, 0%, 9%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(0, 0%, 18%);
+  --radius: 0.5rem;
+  
+  /* Custom Drugga Colors */
+  --pearl: hsl(47, 52%, 96%);
+  --charcoal: hsl(0, 0%, 18%);
+  --deep-red: hsl(0, 100%, 27%);
+  --warm-tan: hsl(32, 36%, 76%);
+  --warm-tan-dark: hsl(32, 20%, 60%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(0, 100%, 27%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom Drugga Styles */
+.hexagon {
+  width: 40px;
+  height: 34.64px;
+  background: linear-gradient(135deg, hsl(0, 100%, 27%) 0%, hsl(0, 100%, 32%) 100%);
+  position: relative;
+  display: inline-block;
+}
+
+.hexagon:before,
+.hexagon:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+}
+
+.hexagon:before {
+  bottom: 100%;
+  border-bottom: 11.55px solid hsl(0, 100%, 27%);
+}
+
+.hexagon:after {
+  top: 100%;
+  border-top: 11.55px solid hsl(0, 100%, 27%);
+}
+
+.auth-badge {
+  background: linear-gradient(135deg, hsl(146, 64%, 42%) 0%, hsl(158, 64%, 52%) 100%);
+  border-radius: 20px;
+  padding: 4px 12px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.glass-effect {
+  background: rgba(248, 246, 240, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.product-card {
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.modal-overlay {
+  background: rgba(45, 45, 45, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.zoom-indicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 0.3s ease-out;
+}
+
+/* Custom utility classes for Drugga brand */
+.text-pearl {
+  color: hsl(47, 52%, 96%);
+}
+
+.text-charcoal {
+  color: hsl(0, 0%, 18%);
+}
+
+.text-deep-red {
+  color: hsl(0, 100%, 27%);
+}
+
+.text-warm-tan {
+  color: hsl(32, 36%, 76%);
+}
+
+.text-warm-tan-dark {
+  color: hsl(32, 20%, 60%);
+}
+
+.bg-pearl {
+  background-color: hsl(47, 52%, 96%);
+}
+
+.bg-charcoal {
+  background-color: hsl(0, 0%, 18%);
+}
+
+.bg-deep-red {
+  background-color: hsl(0, 100%, 27%);
+}
+
+.bg-warm-tan {
+  background-color: hsl(32, 36%, 76%);
+}
+
+.bg-warm-tan-dark {
+  background-color: hsl(32, 20%, 60%);
+}
+
+.border-warm-tan {
+  border-color: hsl(32, 36%, 76%);
+}
+
+.border-deep-red {
+  border-color: hsl(0, 100%, 27%);
+}
+
+.hover\:bg-deep-red:hover {
+  background-color: hsl(0, 100%, 27%);
+}
+
+.hover\:text-deep-red:hover {
+  color: hsl(0, 100%, 27%);
+}
+
+.hover\:border-deep-red:hover {
+  border-color: hsl(0, 100%, 27%);
+}
+
+.focus\:ring-deep-red:focus {
+  --tw-ring-color: hsl(0, 100%, 27%);
+}
