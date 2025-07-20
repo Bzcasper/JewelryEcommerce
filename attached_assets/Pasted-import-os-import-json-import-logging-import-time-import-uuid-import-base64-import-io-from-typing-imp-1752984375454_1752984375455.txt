@@ -1,0 +1,528 @@
+import os
+import json
+import logging
+import time
+import uuid
+import base64
+import io
+from typing import Dict, List, Optional, Any, Union
+from PIL import Image
+import numpy as np
+
+import modal
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("jewelry-ai-app")
+
+# Define Modal image with AI dependencies
+image = modal.Image.debian_slim().pip_install(
+    "fastapi[standard]",
+    "pydantic", 
+    "uvicorn",
+    "transformers",
+    "torch",
+    "torchvision",
+    "pillow",
+    "numpy",
+    "faiss-cpu",
+    "sentence-transformers",
+    "openai",
+    "requests",
+    "python-multipart"
+)
+
+# Define Modal volumes for persistent storage
+models_volume = modal.Volume.from_name("jewelry-models-volume", create_if_missing=True)
+vectors_volume = modal.Volume.from_name("jewelry-vectors-volume", create_if_missing=True)
+
+# Define Modal app
+# Explicitly pass secrets to the app constructor
+app = modal.App(
+    "jewelry-ai-app", 
+    image=image,
+    secrets=[
+        modal.Secret.from_dict({
+            "MODAL_TOKEN_ID": os.environ.get("MODAL_TOKEN_ID", ""),
+            "MODAL_TOKEN_SECRET": os.environ.get("MODAL_TOKEN_SECRET", ""),
+            "HF_TOKEN": os.environ.get("HF_TOKEN", ""),
+            "OPENAI_API_KEY": os.environ.get("MCP_OPENAI_API_KEY", ""),
+            "DEEPSEEK_API_KEY": os.environ.get("DEEPSEEK_API_KEY", "")
+        })
+    ]
+)
+
+# Pydantic models
+class ImageAnalysisRequest(BaseModel):
+    image_data: str  # Base64 encoded image
+    image_name: str
+    
+class ImageAnalysisResponse(BaseModel):
+    title: str
+    description: str
+    category: str
+    material: str
+    condition: str
+    price_estimate: float
+    features: List[str]
+    embedding: List[float]
+    confidence: float
+
+class SimilarityRequest(BaseModel):
+    embedding: List[float]
+    threshold: float = 0.8
+    limit: int = 10
+
+class SimilarityResponse(BaseModel):
+    similar_products: List[Dict[str, Any]]
+    distances: List[float]
+
+# Global variables for models (will be loaded once per container)
+clip_model = None
+clip_processor = None
+faiss_index = None
+product_embeddings = {}
+
+@app.function(
+    gpu="L40S",
+    volumes={
+        "/models": models_volume,
+        "/vectors": vectors_volume
+    },
+    timeout=300
+)
+def load_models():
+    """Load CLIP model and initialize Faiss index"""
+    global clip_model, clip_processor, faiss_index
+    
+    try:
+        from transformers import CLIPModel, CLIPProcessor
+        import faiss
+        
+        logger.info("Loading CLIP model...")
+        model_name = "openai/clip-vit-base-patch32"
+        
+        # Try to load from cache first
+        try:
+            clip_model = CLIPModel.from_pretrained("/models/clip-model")
+            clip_processor = CLIPProcessor.from_pretrained("/models/clip-processor")
+            logger.info("Loaded CLIP model from cache")
+        except:
+            # Download and cache the model
+            clip_model = CLIPModel.from_pretrained(model_name)
+            clip_processor = CLIPProcessor.from_pretrained(model_name)
+            
+            # Save to cache
+            clip_model.save_pretrained("/models/clip-model")
+            clip_processor.save_pretrained("/models/clip-processor")
+            logger.info("Downloaded and cached CLIP model")
+        
+        # Initialize Faiss index
+        embedding_dim = 512  # CLIP embedding dimension
+        faiss_index = faiss.IndexFlatIP(embedding_dim)  # Inner product for cosine similarity
+        
+        # Try to load existing index
+        try:
+            faiss_index = faiss.read_index("/vectors/jewelry_index.faiss")
+            logger.info("Loaded existing Faiss index")
+        except:
+            logger.info("Created new Faiss index")
+        
+        return {"status": "success", "message": "Models loaded successfully"}
+        
+    except Exception as e:
+        logger.error(f"Error loading models: {str(e)}")
+        return {"status": "error", "message": str(e)}
+
+@app.function(
+    gpu="L40S",
+    volumes={
+        "/models": models_volume,
+        "/vectors": vectors_volume
+    },
+    timeout=300
+)
+def analyze_jewelry_image(image_data: str, image_name: str) -> Dict[str, Any]:
+    """Analyze jewelry image using CLIP and generate product details"""
+    global clip_model, clip_processor
+    
+    try:
+        # Load models if not already loaded (should be handled by container startup)
+        if clip_model is None or clip_processor is None:
+            # This should ideally not happen if load_models is called on startup
+            # For robustness, we can add a warning or a more explicit load mechanism
+            logger.warning("Models not loaded, attempting to load within function.")
+            load_models.remote() # Call the remote function to load models
+            
+        # Decode base64 image
+        image_bytes = base64.b64decode(image_data)
+        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        
+        # Process image with CLIP
+        inputs = clip_processor(images=image, return_tensors="pt")
+        image_features = clip_model.get_image_features(**inputs)
+        
+        # Normalize embedding for cosine similarity
+        embedding = image_features.detach().numpy()[0]
+        embedding = embedding / np.linalg.norm(embedding)
+        
+        # Analyze image content using CLIP text-image similarity
+        jewelry_categories = [
+            "diamond ring", "gold necklace", "silver earrings", "pearl bracelet",
+            "vintage brooch", "wedding ring", "engagement ring", "tennis bracelet",
+            "pendant necklace", "stud earrings", "chain bracelet", "gemstone ring",
+            "luxury watch", "antique jewelry", "modern jewelry", "classic jewelry"
+        ]
+        
+        materials = [
+            "gold", "silver", "platinum", "diamond", "pearl", "ruby", "sapphire",
+            "emerald", "titanium", "stainless steel", "rose gold", "white gold"
+        ]
+        
+        conditions = [
+            "excellent condition", "very good condition", "good condition", 
+            "fair condition", "vintage condition", "antique condition"
+        ]
+        
+        # Get text embeddings for categories
+        category_texts = [f"a {cat}" for cat in jewelry_categories]
+        material_texts = [f"made of {mat}" for mat in materials]
+        condition_texts = [f"in {cond}" for cond in conditions]
+        
+        # Find best matching category
+        category_inputs = clip_processor(text=category_texts, return_tensors="pt", padding=True)
+        category_features = clip_model.get_text_features(**category_inputs)
+        category_similarities = np.dot(embedding, category_features.detach().numpy().T)
+        best_category_idx = np.argmax(category_similarities)
+        best_category = jewelry_categories[best_category_idx].title()
+        
+        # Find best matching material
+        material_inputs = clip_processor(text=material_texts, return_tensors="pt", padding=True)
+        material_features = clip_model.get_text_features(**material_inputs)
+        material_similarities = np.dot(embedding, material_features.detach().numpy().T)
+        best_material_idx = np.argmax(material_similarities)
+        best_material = materials[best_material_idx].title()
+        
+        # Find best matching condition
+        condition_inputs = clip_processor(text=condition_texts, return_tensors="pt", padding=True)
+        condition_features = clip_model.get_text_features(**condition_inputs)
+        condition_similarities = np.dot(embedding, condition_features.detach().numpy().T)
+        best_condition_idx = np.argmax(condition_similarities)
+        best_condition = conditions[best_condition_idx].replace(" condition", "").title()
+        
+        # Generate title and description
+        title = f"{best_material} {best_category}"
+        description = f"Beautiful {best_material.lower()} {best_category.lower()} in {best_condition.lower()} condition. This exquisite piece showcases exceptional craftsmanship and timeless elegance."
+        
+        # Estimate price based on category and material
+        base_prices = {
+            "Diamond Ring": 1500, "Gold Necklace": 800, "Silver Earrings": 200,
+            "Pearl Bracelet": 400, "Vintage Brooch": 300, "Wedding Ring": 2000,
+            "Engagement Ring": 3000, "Tennis Bracelet": 1200, "Pendant Necklace": 600,
+            "Stud Earrings": 300, "Chain Bracelet": 250, "Gemstone Ring": 800,
+            "Luxury Watch": 5000, "Antique Jewelry": 1000, "Modern Jewelry": 500,
+            "Classic Jewelry": 400
+        }
+        
+        material_multipliers = {
+            "Gold": 1.5, "Silver": 1.0, "Platinum": 2.0, "Diamond": 3.0,
+            "Pearl": 1.2, "Ruby": 2.5, "Sapphire": 2.2, "Emerald": 2.8,
+            "Titanium": 0.8, "Stainless Steel": 0.6, "Rose Gold": 1.4, "White Gold": 1.6
+        }
+        
+        base_price = base_prices.get(best_category, 500)
+        material_mult = material_multipliers.get(best_material, 1.0)
+        price_estimate = base_price * material_mult
+        
+        # Extract features
+        features = [
+            f"Material: {best_material}",
+            f"Category: {best_category}",
+            f"Condition: {best_condition}",
+            f"Style: Classic",
+            f"Suitable for: Special occasions"
+        ]
+        
+        # Calculate confidence based on similarity scores
+        confidence = float(np.max(category_similarities))
+        
+        return {
+            "title": title,
+            "description": description,
+            "category": best_category,
+            "material": best_material,
+            "condition": best_condition,
+            "price_estimate": round(price_estimate, 2),
+            "features": features,
+            "embedding": embedding.tolist(),
+            "confidence": confidence,
+            "status": "success"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error analyzing image: {str(e)}")
+        return {
+            "status": "error",
+            "message": str(e),
+            "title": "Unknown Jewelry",
+            "description": "Unable to analyze image",
+            "category": "Unknown",
+            "material": "Unknown",
+            "condition": "Unknown",
+            "price_estimate": 0.0,
+            "features": [],
+            "embedding": [],
+            "confidence": 0.0
+        }
+
+@app.function(
+    volumes={"/vectors": vectors_volume},
+    timeout=60
+)
+def find_similar_products(embedding: List[float], threshold: float = 0.8, limit: int = 10) -> Dict[str, Any]:
+    """Find similar products using Faiss vector search"""
+    global faiss_index, product_embeddings
+    
+    try:
+        import faiss
+        
+        # Load index if not already loaded
+        if faiss_index is None:
+            try:
+                faiss_index = faiss.read_index("/vectors/jewelry_index.faiss")
+            except:
+                # Create new index if none exists
+                embedding_dim = len(embedding)
+                faiss_index = faiss.IndexFlatIP(embedding_dim)
+        
+        # Convert embedding to numpy array
+        query_embedding = np.array([embedding], dtype=np.float32)
+        
+        # Search for similar vectors
+        if faiss_index.ntotal > 0:
+            distances, indices = faiss_index.search(query_embedding, min(limit, faiss_index.ntotal))
+            
+            # Filter by threshold
+            valid_results = []
+            valid_distances = []
+            
+            for i, (distance, idx) in enumerate(zip(distances[0], indices[0])):
+                if distance >= threshold and idx != -1:
+                    valid_results.append({
+                        "product_id": f"prod_{idx}",
+                        "similarity": float(distance),
+                        "index": int(idx)
+                    })
+                    valid_distances.append(float(distance))
+            
+            return {
+                "similar_products": valid_results,
+                "distances": valid_distances,
+                "total_found": len(valid_results),
+                "status": "success"
+            }
+        else:
+            return {
+                "similar_products": [],
+                "distances": [],
+                "total_found": 0,
+                "status": "success",
+                "message": "No products in index"
+            }
+            
+    except Exception as e:
+        logger.error(f"Error finding similar products: {str(e)}")
+        return {
+            "similar_products": [],
+            "distances": [],
+            "total_found": 0,
+            "status": "error",
+            "message": str(e)
+        }
+
+@app.function(
+    volumes={"/vectors": vectors_volume},
+    timeout=60
+)
+def add_product_to_index(product_id: str, embedding: List[float]) -> Dict[str, Any]:
+    """Add product embedding to Faiss index"""
+    global faiss_index, product_embeddings
+    
+    try:
+        import faiss
+        
+        # Load or create index
+        if faiss_index is None:
+            embedding_dim = len(embedding)
+            faiss_index = faiss.IndexFlatIP(embedding_dim)
+        
+        # Add embedding to index
+        embedding_array = np.array([embedding], dtype=np.float32)
+        faiss_index.add(embedding_array)
+        
+        # Store product mapping
+        product_embeddings[product_id] = {
+            "embedding": embedding,
+            "index": faiss_index.ntotal - 1
+        }
+        
+        # Save index
+        faiss.write_index(faiss_index, "/vectors/jewelry_index.faiss")
+        
+        return {
+            "status": "success",
+            "message": f"Added product {product_id} to index",
+            "index_size": faiss_index.ntotal
+        }
+        
+    except Exception as e:
+        logger.error(f"Error adding product to index: {str(e)}")
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+
+@app.function(
+    volumes={"/vectors": vectors_volume},
+    timeout=60
+)
+def get_index_stats() -> Dict[str, Any]:
+    """Get statistics about the Faiss index"""
+    global faiss_index
+    
+    try:
+        import faiss
+        
+        if faiss_index is None:
+            try:
+                faiss_index = faiss.read_index("/vectors/jewelry_index.faiss")
+            except:
+                return {
+                    "total_products": 0,
+                    "index_size": 0,
+                    "status": "success",
+                    "message": "No index found"
+                }
+        
+        return {
+            "total_products": faiss_index.ntotal,
+            "index_size": faiss_index.ntotal,
+            "dimension": faiss_index.d,
+            "status": "success"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting index stats: {str(e)}")
+        return {
+            "total_products": 0,
+            "index_size": 0,
+            "status": "error",
+            "message": str(e)
+        }
+
+# FastAPI app for web endpoints
+web_app = FastAPI(title="Jewelry AI Analysis API")
+
+# Add CORS middleware
+web_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@web_app.post("/analyze-image")
+async def analyze_image_endpoint(
+    image_data: str = Form(...),
+    image_name: str = Form(...)
+):
+    """Analyze jewelry image endpoint"""
+    try:
+        result = analyze_jewelry_image.remote(image_data, image_name)
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e)}
+        )
+
+@web_app.post("/find-similar")
+async def find_similar_endpoint(request: SimilarityRequest):
+    """Find similar products endpoint"""
+    try:
+        result = find_similar_products.remote(
+            request.embedding, 
+            request.threshold, 
+            request.limit
+        )
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e)}
+        )
+
+@web_app.post("/add-product")
+async def add_product_endpoint(
+    product_id: str = Form(...),
+    embedding: str = Form(...)  # JSON string of embedding
+):
+    """Add product to index endpoint"""
+    try:
+        embedding_list = json.loads(embedding)
+        result = add_product_to_index.remote(product_id, embedding_list)
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e)}
+        )
+
+@web_app.get("/index-stats")
+async def index_stats_endpoint():
+    """Get index statistics endpoint"""
+    try:
+        result = get_index_stats.remote()
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e)}
+        )
+
+@web_app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy", "service": "jewelry-ai-app"}
+
+# Deploy the FastAPI app
+@app.function(
+    volumes={
+        "/models": models_volume,
+        "/vectors": vectors_volume
+    },
+    allow_concurrent_inputs=10
+)
+@modal.asgi_app()
+def fastapi_app():
+    # Ensure models are loaded when the ASGI app starts
+    load_models.remote()
+    return web_app
+
+if __name__ == "__main__":
+    # Initialize models when running locally
+    with app.run():
+        print("Loading models...")
+        result = load_models.remote()
+        print(f"Model loading result: {result}")
+        
+        print("Getting index stats...")
+        stats = get_index_stats.remote()
+        print(f"Index stats: {stats}")
+
+

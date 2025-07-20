@@ -15,6 +15,97 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 
+// Modal AI Integration
+const MODAL_AI_URL = "https://bzcasper--jewelry-ai-app-fastapi-app.modal.run";
+
+async function processModalAIAnalysis(analysisId: number, imageUrls: any) {
+  try {
+    // Mark as processing
+    await storage.updateAiAnalysis(analysisId, { status: "processing" });
+
+    // Convert first image URL to base64 for Modal AI
+    const imageArray = Array.isArray(imageUrls) ? imageUrls : [];
+    if (imageArray.length === 0) {
+      throw new Error("No images provided for analysis");
+    }
+
+    // For demo, we'll use the first image
+    const imageUrl = imageArray[0];
+    let imageData: string;
+    
+    if (imageUrl.startsWith('data:image/')) {
+      // Already base64 encoded
+      imageData = imageUrl.split(',')[1];
+    } else {
+      // Fetch and convert to base64
+      const response = await fetch(imageUrl);
+      const buffer = await response.arrayBuffer();
+      imageData = Buffer.from(buffer).toString('base64');
+    }
+
+    // Call Modal AI service
+    const modalResponse = await fetch(`${MODAL_AI_URL}/analyze-image`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        image_data: imageData,
+        image_name: `analysis_${analysisId}.jpg`
+      })
+    });
+
+    if (!modalResponse.ok) {
+      throw new Error(`Modal AI service error: ${modalResponse.statusText}`);
+    }
+
+    const modalResult = await modalResponse.json();
+
+    if (modalResult.status === 'error') {
+      throw new Error(modalResult.message || 'Modal AI analysis failed');
+    }
+
+    // Transform Modal results to our schema
+    const analysisResults = {
+      materials: [modalResult.material || 'Unknown'],
+      authenticity: modalResult.confidence > 0.7 ? 'Authenticated' : 'Needs Further Review',
+      condition: modalResult.condition || 'Unknown',
+      estimatedValue: { 
+        min: Math.max(100, modalResult.price_estimate * 0.8 || 500), 
+        max: modalResult.price_estimate * 1.2 || 1000 
+      },
+      confidence: modalResult.confidence || 0.5,
+      title: modalResult.title || 'Unknown Jewelry',
+      description: modalResult.description || 'Analysis completed',
+      category: modalResult.category || 'Unknown',
+      features: modalResult.features || []
+    };
+
+    // Update analysis with results
+    await storage.updateAiAnalysis(analysisId, {
+      status: "completed",
+      analysisResults
+    });
+
+    console.log(`AI Analysis ${analysisId} completed successfully`);
+
+  } catch (error) {
+    console.error(`AI Analysis ${analysisId} failed:`, error);
+    
+    // Mark as failed
+    await storage.updateAiAnalysis(analysisId, {
+      status: "failed",
+      analysisResults: {
+        materials: [],
+        authenticity: "Analysis Failed",
+        condition: "Unknown",
+        estimatedValue: { min: 0, max: 0 },
+        confidence: 0
+      }
+    });
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
@@ -273,20 +364,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const analysisData = insertAiAnalysisSchema.parse({ ...req.body, userId });
       const analysis = await storage.createAiAnalysis(analysisData);
 
-      // TODO: Trigger AI analysis process here
-      // For now, we'll just mark it as completed with mock results
-      setTimeout(async () => {
-        await storage.updateAiAnalysis(analysis.id, {
-          status: "completed",
-          analysisResults: {
-            materials: ["Gold", "Diamond"],
-            authenticity: "Authenticated",
-            condition: "Excellent",
-            estimatedValue: { min: 1500, max: 2500 },
-            confidence: 0.92,
-          },
-        });
-      }, 5000);
+      // Trigger Modal AI analysis process  
+      processModalAIAnalysis(analysis.id, analysisData.imageUrls);
 
       res.json(analysis);
     } catch (error) {

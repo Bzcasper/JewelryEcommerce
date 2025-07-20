@@ -128,7 +128,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createCategory(category: InsertCategory): Promise<Category> {
-    const [created] = await db.insert(categories).values(category).returning();
+    const [created] = await db.insert(categories).values([category]).returning();
     return created;
   }
 
@@ -138,7 +138,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createMaterial(material: InsertMaterial): Promise<Material> {
-    const [created] = await db.insert(materials).values(material).returning();
+    const [created] = await db.insert(materials).values([material]).returning();
     return created;
   }
 
@@ -148,7 +148,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createEra(era: InsertEra): Promise<Era> {
-    const [created] = await db.insert(eras).values(era).returning();
+    const [created] = await db.insert(eras).values([era]).returning();
     return created;
   }
 
@@ -158,7 +158,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createBrand(brand: InsertBrand): Promise<Brand> {
-    const [created] = await db.insert(brands).values(brand).returning();
+    const [created] = await db.insert(brands).values([brand]).returning();
     return created;
   }
 
@@ -175,9 +175,6 @@ export class DatabaseStorage implements IStorage {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ products: Product[]; total: number }> {
-    let query = db.select().from(products);
-    let countQuery = db.select({ count: sql<number>`count(*)` }).from(products);
-
     const conditions = [];
 
     if (filters.categoryId) {
@@ -213,26 +210,24 @@ export class DatabaseStorage implements IStorage {
     // Always show in-stock items
     conditions.push(eq(products.inStock, true));
 
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions));
-      countQuery = countQuery.where(and(...conditions));
-    }
+    // Build the where clause
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
     // Get total count
-    const [{ count: total }] = await countQuery;
+    const countResult = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(products)
+      .where(whereClause || sql`1=1`);
+    const total = countResult[0].count;
 
-    // Apply ordering, limit, and offset
-    query = query.orderBy(desc(products.createdAt));
-
-    if (filters.limit) {
-      query = query.limit(filters.limit);
-    }
-
-    if (filters.offset) {
-      query = query.offset(filters.offset);
-    }
-
-    const productResults = await query;
+    // Build and execute main query
+    const productResults = await db
+      .select()
+      .from(products)
+      .where(whereClause || sql`1=1`)
+      .orderBy(desc(products.createdAt))
+      .limit(filters.limit || 100)
+      .offset(filters.offset || 0);
 
     return { products: productResults, total };
   }
@@ -243,14 +238,31 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createProduct(product: InsertProduct): Promise<Product> {
-    const [created] = await db.insert(products).values(product).returning();
+    // Handle array fields properly
+    const productData: any = {
+      ...product,
+      imageUrls: Array.isArray(product.imageUrls) ? product.imageUrls : []
+    };
+    const [created] = await db.insert(products).values(productData).returning();
     return created;
   }
 
   async updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product> {
+    // Prepare update data excluding problematic fields
+    const { imageUrls, ...cleanProduct } = product;
+    const updateData: any = { 
+      ...cleanProduct, 
+      updatedAt: new Date() 
+    };
+    
+    // Only include imageUrls if it's provided
+    if (imageUrls !== undefined) {
+      updateData.imageUrls = imageUrls;
+    }
+    
     const [updated] = await db
       .update(products)
-      .set({ ...product, updatedAt: new Date() })
+      .set(updateData)
       .where(eq(products.id, id))
       .returning();
     return updated;
@@ -277,13 +289,13 @@ export class DatabaseStorage implements IStorage {
       // Update quantity
       const [updated] = await db
         .update(cartItems)
-        .set({ quantity: existing.quantity + (cartItem.quantity || 1) })
+        .set({ quantity: (existing.quantity || 0) + (cartItem.quantity || 1) })
         .where(eq(cartItems.id, existing.id))
         .returning();
       return updated;
     } else {
       // Create new cart item
-      const [created] = await db.insert(cartItems).values(cartItem).returning();
+      const [created] = await db.insert(cartItems).values([cartItem]).returning();
       return created;
     }
   }
@@ -320,7 +332,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createOrder(order: InsertOrder): Promise<Order> {
-    const [created] = await db.insert(orders).values(order).returning();
+    const [created] = await db.insert(orders).values([order]).returning();
     return created;
   }
 
@@ -339,7 +351,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async addToWishlist(wishlistItem: InsertWishlistItem): Promise<WishlistItem> {
-    const [created] = await db.insert(wishlistItems).values(wishlistItem).returning();
+    const [created] = await db.insert(wishlistItems).values([wishlistItem]).returning();
     return created;
   }
 
@@ -353,7 +365,12 @@ export class DatabaseStorage implements IStorage {
 
   // AI Analysis operations
   async createAiAnalysis(analysis: InsertAiAnalysis): Promise<AiAnalysis> {
-    const [created] = await db.insert(aiAnalyses).values(analysis).returning();
+    // Handle array fields properly
+    const analysisData: any = {
+      ...analysis,
+      imageUrls: Array.isArray(analysis.imageUrls) ? analysis.imageUrls : []
+    };
+    const [created] = await db.insert(aiAnalyses).values(analysisData).returning();
     return created;
   }
 
