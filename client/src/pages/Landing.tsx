@@ -7,13 +7,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
-import ProductModal from '@/components/ProductModal';
 import { useQuery } from '@tanstack/react-query';
 import type { Product } from '@shared/schema';
 
 export default function Landing() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('');
 
   // Fetch featured products (public access)
@@ -31,10 +28,7 @@ export default function Landing() {
     queryKey: ['/api/categories'],
   });
 
-  const handleProductClick = (product: Product) => {
-    setSelectedProduct(product);
-    setIsModalOpen(true);
-  };
+
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -187,7 +181,6 @@ export default function Landing() {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onOpenModal={handleProductClick}
                 />
               ))}
             </div>
@@ -291,12 +284,6 @@ export default function Landing() {
       </section>
 
       <Footer />
-
-      <ProductModal
-        product={selectedProduct}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </div>
   );
 }
