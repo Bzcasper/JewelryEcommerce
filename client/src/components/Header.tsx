@@ -35,7 +35,8 @@ export default function Header() {
     { name: 'Earrings', href: '/products?category=earrings' },
     { name: 'Bracelets', href: '/products?category=bracelets' },
     { name: 'Watches', href: '/products?category=watches' },
-    { name: 'Brands', href: '/products?brands=all' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   return (
@@ -88,9 +89,11 @@ export default function Header() {
             </Link>
 
             {/* Wishlist */}
-            <Button variant="ghost" size="sm" className="text-charcoal hover:text-deep-red">
-              <Heart className="h-5 w-5" />
-            </Button>
+            <Link href="/wishlist">
+              <Button variant="ghost" size="sm" className="text-charcoal hover:text-deep-red">
+                <Heart className="h-5 w-5" />
+              </Button>
+            </Link>
 
             {/* User Account */}
             {isAuthenticated ? (
