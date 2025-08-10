@@ -9,7 +9,7 @@ import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import ProductModal from '@/components/ProductModal';
 import { useQuery } from '@tanstack/react-query';
-import type { Product } from '@shared/schema';
+import type { Product, Category } from '@shared/schema';
 
 export default function Homepage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -27,7 +27,7 @@ export default function Homepage() {
   });
 
   // Fetch categories
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ['/api/categories'],
   });
 

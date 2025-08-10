@@ -8,16 +8,17 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { apiRequest, queryClient } from '@/lib/queryClient';
+import { type Product, type Category } from '@shared/schema';
 
 export default function AdminProducts() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  const { data: products = [], isLoading } = useQuery({
+  const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ['/api/products']
   });
 
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ['/api/categories']
   });
 

@@ -6,11 +6,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
+import { type WishlistItem, type Product, type Category, type Brand } from '@shared/schema';
 
 export default function Wishlist() {
   const { isAuthenticated } = useAuth();
 
-  const { data: wishlistItems = [], isLoading } = useQuery({
+  const { data: wishlistItems = [], isLoading } = useQuery<
+    (WishlistItem & { product: Product & { category: Category, brand: Brand } })[]
+  >({
     queryKey: ['/api/wishlist'],
     enabled: isAuthenticated,
   });
@@ -104,7 +107,7 @@ export default function Wishlist() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {wishlistItems.map((item) => (
+          {wishlistItems.map((item: WishlistItem & { product: Product }) => (
             <Card key={item.id} className="group hover:shadow-lg transition-shadow">
               <CardContent className="p-0">
                 {/* Product Image */}

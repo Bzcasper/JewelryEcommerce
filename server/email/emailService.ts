@@ -15,7 +15,7 @@ const createTransporter = () => {
     },
   };
 
-  return nodemailer.createTransporter(emailConfig);
+  return nodemailer.createTransport(emailConfig);
 };
 
 export interface OrderEmailData {
@@ -41,8 +41,8 @@ export async function sendOrderConfirmationEmail(data: OrderEmailData) {
           image: product.mainImageUrl || '',
         })),
         total: parseFloat(data.order.total),
-        shippingAddress: data.order.shippingAddress,
-        orderDate: new Date(data.order.createdAt),
+        shippingAddress: formatShippingAddress(data.order.shippingAddress),
+        orderDate: data.order.createdAt ? new Date(data.order.createdAt) : new Date(),
       })
     );
 

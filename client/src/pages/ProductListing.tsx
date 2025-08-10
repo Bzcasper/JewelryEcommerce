@@ -11,7 +11,7 @@ import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import ProductModal from '@/components/ProductModal';
 import { useQuery } from '@tanstack/react-query';
-import type { Product } from '@shared/schema';
+import type { Product, Brand, Era, Category } from '@shared/schema';
 
 export default function ProductListing() {
   const [location] = useLocation();
@@ -64,9 +64,9 @@ export default function ProductListing() {
   });
 
   // Fetch filter options
-  const { data: categories = [] } = useQuery({ queryKey: ['/api/categories'] });
-  const { data: brands = [] } = useQuery({ queryKey: ['/api/brands'] });
-  const { data: eras = [] } = useQuery({ queryKey: ['/api/eras'] });
+  const { data: categories = [] } = useQuery<Category[]>({ queryKey: ['/api/categories'] });
+  const { data: brands = [] } = useQuery<Brand[]>({ queryKey: ['/api/brands'] });
+  const { data: eras = [] } = useQuery<Era[]>({ queryKey: ['/api/eras'] });
 
   const products = productsResult?.products || [];
   const totalProducts = productsResult?.total || 0;

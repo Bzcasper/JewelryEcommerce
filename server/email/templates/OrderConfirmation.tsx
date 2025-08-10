@@ -122,7 +122,7 @@ export default function OrderConfirmationEmail({
 
             {/* CTA Button */}
             <Section style={buttonSection}>
-              <Button pX={20} pY={12} style={button} href="https://luxuryjewelry.com/account/orders">
+              <Button style={{...button, padding: '12px 20px'}} href="https://luxuryjewelry.com/account/orders">
                 View Order Details
               </Button>
             </Section>

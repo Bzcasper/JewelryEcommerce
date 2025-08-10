@@ -41,15 +41,9 @@ app.use((req, res, next) => {
   const server = await registerRoutes(app);
   
   // Initialize sample data
-  await storage.seedSampleData();
-
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
-  });
+  if (app.get("env") === "development") {
+    await storage.seedSampleData();
+  }
 
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
@@ -59,6 +53,19 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
+
+  // Error handling middleware
+  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+    console.error(err); // Log the error for debugging
+    const status = err.status || err.statusCode || 500;
+    const message = err.message || "Internal Server Error";
+    res.status(status).json({
+      error: {
+        message,
+        status,
+      },
+    });
+  });
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Other ports are firewalled. Default to 5000 if not specified.
