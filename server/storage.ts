@@ -456,19 +456,25 @@ export class DatabaseStorage implements IStorage {
       db.select().from(brands).where(inArray(brands.id, brandIds as number[]))
     ]);
 
-    return userWishlistItems.map(item => {
-      const product = wishlistProducts.find(p => p.id === item.productId);
-      const category = allCategories.find(c => c.id === product?.categoryId);
-      const brand = allBrands.find(b => b.id === product?.brandId);
-      return {
-        ...item,
-        product: {
-          ...product,
-          category,
-          brand
+    return userWishlistItems
+      .map(item => {
+        const product = wishlistProducts.find(p => p.id === item.productId);
+        const category = allCategories.find(c => c.id === product?.categoryId);
+        const brand = allBrands.find(b => b.id === product?.brandId);
+        if (!product || !category || !brand) {
+          // Optionally log or handle missing data here
+          return null;
         }
-      }
-    }) as (WishlistItem & { product: Product & { category: Category, brand: Brand } })[];
+        return {
+          ...item,
+          product: {
+            ...product,
+            category,
+            brand
+          }
+        };
+      })
+      .filter((item): item is WishlistItem & { product: Product & { category: Category, brand: Brand } } => item !== null);
   }
 
   async addToWishlist(wishlistItem: InsertWishlistItem): Promise<WishlistItem> {
