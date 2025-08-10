@@ -348,19 +348,25 @@ export class DatabaseStorage implements IStorage {
       db.select().from(brands).where(inArray(brands.id, brandIds))
     ]);
 
-    return userCartItems.map(item => {
-      const product = cartProducts.find(p => p.id === item.productId);
-      const category = allCategories.find(c => c.id === product?.categoryId);
-      const brand = allBrands.find(b => b.id === product?.brandId);
-      return {
-        ...item,
-        product: {
-          ...product,
-          category,
-          brand
+    return userCartItems
+      .map(item => {
+        const product = cartProducts.find(p => p.id === item.productId);
+        const category = product ? allCategories.find(c => c.id === product.categoryId) : undefined;
+        const brand = product ? allBrands.find(b => b.id === product.brandId) : undefined;
+        if (!product || !category || !brand) {
+          // Skip items with missing data
+          return null;
         }
-      }
-    }) as (CartItem & { product: Product & { category: Category, brand: Brand } })[];
+        return {
+          ...item,
+          product: {
+            ...product,
+            category,
+            brand
+          }
+        };
+      })
+      .filter((item): item is CartItem & { product: Product & { category: Category, brand: Brand } } => item !== null);
   }
 
   async addToCart(cartItem: InsertCartItem): Promise<CartItem> {
