@@ -143,7 +143,7 @@ export default function Wishlist() {
                     {item.product?.title}
                   </h3>
                   <p className="text-sm text-warm-tan-dark mb-2">
-                    {(item.product as any)?.brand?.name}
+                    {item.product?.brand?.name}
                   </p>
                   
                   <div className="flex items-center justify-between mb-4">
