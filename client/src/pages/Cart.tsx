@@ -9,12 +9,15 @@ import { useAuth } from '@/hooks/useAuth';
 import StripeCheckout from '@/components/StripeCheckout';
 import { toast } from 'react-hot-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
+import { type CartItem, type Product, type Category, type Brand } from '@shared/schema';
 
 export default function Cart() {
   const { isAuthenticated } = useAuth();
   const [showCheckout, setShowCheckout] = useState(false);
 
-  const { data: cartItems = [], isLoading } = useQuery({
+  const { data: cartItems = [], isLoading } = useQuery<
+    (CartItem & { product: Product & { category: Category, brand: Brand } })[]
+  >({
     queryKey: ['/api/cart'],
     enabled: isAuthenticated,
   });
@@ -51,8 +54,8 @@ export default function Cart() {
     }
   };
 
-  const subtotal = cartItems.reduce((total, item) => {
-    return total + (parseFloat(item.product?.price || '0') * item.quantity);
+  const subtotal = cartItems.reduce((total: number, item: CartItem & { product: Product }) => {
+    return total + (parseFloat(item.product?.price || '0') * (item.quantity ?? 0));
   }, 0);
 
   const tax = subtotal * 0.0875; // 8.75% tax
@@ -151,7 +154,7 @@ export default function Cart() {
           <div className="lg:col-span-8">
             <Card>
               <CardContent className="p-6">
-                {cartItems.map((item, index) => (
+                {cartItems.map((item: CartItem & { product: Product }, index: number) => (
                   <div key={item.id}>
                     {index > 0 && <Separator className="my-6" />}
                     <div className="flex gap-4">
@@ -176,7 +179,7 @@ export default function Cart() {
                           {item.product?.title}
                         </h3>
                         <p className="text-sm text-warm-tan-dark mb-2">
-                          {item.product?.category?.name} • {item.product?.brand?.name}
+                          {(item.product as any)?.category?.name} • {(item.product as any)?.brand?.name}
                         </p>
                         
                         {/* Quantity Controls */}
@@ -185,19 +188,19 @@ export default function Cart() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => handleQuantityChange(item.id, item.quantity, -1)}
+                              onClick={() => handleQuantityChange(item.id, item.quantity ?? 0, -1)}
                               disabled={updateQuantityMutation.isPending}
                               className="h-8 w-8 p-0"
                             >
                               <Minus className="h-4 w-4" />
                             </Button>
                             <span className="w-12 text-center font-medium">
-                              {item.quantity}
+                              {item.quantity ?? 0}
                             </span>
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => handleQuantityChange(item.id, item.quantity, 1)}
+                              onClick={() => handleQuantityChange(item.id, item.quantity ?? 0, 1)}
                               disabled={updateQuantityMutation.isPending}
                               className="h-8 w-8 p-0"
                             >
@@ -221,9 +224,9 @@ export default function Cart() {
                       {/* Price */}
                       <div className="text-right">
                         <p className="font-bold text-lg text-charcoal">
-                          ${(parseFloat(item.product?.price || '0') * item.quantity).toFixed(2)}
+                          ${(parseFloat(item.product?.price || '0') * (item.quantity ?? 0)).toFixed(2)}
                         </p>
-                        {item.quantity > 1 && (
+                        {(item.quantity ?? 0) > 1 && (
                           <p className="text-sm text-warm-tan-dark">
                             ${parseFloat(item.product?.price || '0').toFixed(2)} each
                           </p>

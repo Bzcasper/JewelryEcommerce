@@ -23,7 +23,7 @@ import AdminOrders from "@/pages/Admin/Orders";
 import AdminProducts from "@/pages/Admin/Products";
 
 function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isAdmin } = useAuth();
 
   return (
     <Switch>
@@ -37,7 +37,10 @@ function Router() {
       <Route path="/404" component={Error404} />
       
       {/* Main application routes */}
-      {isLoading || !isAuthenticated ? (
+      {isLoading ? (
+        // Render a loading indicator while auth status is being determined
+        <Route path="/" component={() => <div>Loading...</div>} />
+      ) : !isAuthenticated ? (
         <>
           <Route path="/" component={Landing} />
           <Route path="/products" component={ProductListing} />
@@ -51,11 +54,15 @@ function Router() {
           <Route path="/upload" component={AIUpload} />
           <Route path="/wishlist" component={Wishlist} />
           
-          {/* Admin routes (should include role checking in real app) */}
-          <Route path="/admin" component={AdminDashboard} />
-          <Route path="/admin/dashboard" component={AdminDashboard} />
-          <Route path="/admin/orders" component={AdminOrders} />
-          <Route path="/admin/products" component={AdminProducts} />
+          {/* Admin routes */}
+          {isAdmin && (
+            <>
+              <Route path="/admin" component={AdminDashboard} />
+              <Route path="/admin/dashboard" component={AdminDashboard} />
+              <Route path="/admin/orders" component={AdminOrders} />
+              <Route path="/admin/products" component={AdminProducts} />
+            </>
+          )}
         </>
       )}
       

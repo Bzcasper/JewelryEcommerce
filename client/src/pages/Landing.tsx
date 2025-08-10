@@ -8,7 +8,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { useQuery } from '@tanstack/react-query';
-import type { Product } from '@shared/schema';
+import type { Product, Category } from '@shared/schema';
 
 export default function Landing() {
   const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ export default function Landing() {
   });
 
   // Fetch categories (public access)
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ['/api/categories'],
   });
 
@@ -181,6 +181,7 @@ export default function Landing() {
                 <ProductCard
                   key={product.id}
                   product={product}
+                  onOpenModal={() => {}}
                 />
               ))}
             </div>

@@ -15,6 +15,7 @@ import AnalysisForm from '@/components/ai-upload/AnalysisForm';
 import AnalysisStatusCard from '@/components/ai-upload/AnalysisStatusCard';
 import TipsCards from '@/components/ai-upload/TipsCards';
 import RecentAnalysesList from '@/components/ai-upload/RecentAnalysesList';
+import { type AiAnalysis } from '@shared/schema';
 
 export default function AIUpload() {
   const [jewelryType, setJewelryType] = useState('');
@@ -43,7 +44,7 @@ export default function AIUpload() {
   }, [isAuthenticated, isLoading, toast]);
 
   // Fetch user's AI analyses
-  const { data: analyses = [] } = useQuery({
+  const { data: analyses = [] } = useQuery<AiAnalysis[]>({
     queryKey: ['/api/ai-analysis'],
     enabled: isAuthenticated,
   });
@@ -64,7 +65,7 @@ export default function AIUpload() {
   const submitAnalysisMutation = useMutation({
     mutationFn: async (analysisData: any) => {
       const response = await apiRequest('POST', '/api/ai-analysis', analysisData);
-      return response;
+      return await response.json() as AiAnalysis;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/ai-analysis'] });

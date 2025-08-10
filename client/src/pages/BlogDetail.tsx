@@ -6,8 +6,20 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
+interface BlogPost {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  date: string;
+  readTime: string;
+  image: string;
+  category: string;
+  tags: string[];
+}
+
 // Mock blog data (in a real app, this would come from an API)
-const blogPosts = {
+const blogPosts: { [key: number]: BlogPost } = {
   1: {
     id: 1,
     title: "The Art of Vintage Jewelry Authentication",
@@ -126,7 +138,7 @@ export default function BlogDetail() {
 
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-6">
-              {post.tags.map((tag) => (
+              {post.tags.map((tag: string) => (
                 <Badge key={tag} variant="outline" className="text-xs">
                   <Tag className="w-3 h-3 mr-1" />
                   {tag}

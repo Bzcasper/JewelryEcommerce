@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { isUnauthorizedError } from '@/lib/authUtils';
 import { useForm } from 'react-hook-form';
+import { type Order, type WishlistItem, type Product } from '@shared/schema';
 
 type ActiveSection = 'profile' | 'orders' | 'wishlist' | 'addresses' | 'settings';
 
@@ -51,13 +52,13 @@ export default function Account() {
   }, [user, setValue]);
 
   // Fetch user orders
-  const { data: orders = [] } = useQuery({
+  const { data: orders = [] } = useQuery<Order[]>({
     queryKey: ['/api/orders'],
     enabled: isAuthenticated,
   });
 
   // Fetch wishlist items with product details
-  const { data: wishlistItems = [] } = useQuery({
+  const { data: wishlistItems = [] } = useQuery<WishlistItem[]>({
     queryKey: ['/api/wishlist'],
     enabled: isAuthenticated,
   });

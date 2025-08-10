@@ -14,9 +14,15 @@ import {
   insertBrandSchema,
 } from "@shared/schema";
 import { z } from "zod";
+import { isAdmin } from "./authMiddleware";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: undefined,
+});
 
 // Modal AI Integration
-const MODAL_AI_URL = "https://bzcasper--jewelry-ai-app-fastapi-app.modal.run";
+const MODAL_AI_URL = process.env.MODAL_AI_URL || "https://bzcasper--jewelry-ai-app-fastapi-app.modal.run";
 
 async function processModalAIAnalysis(analysisId: number, imageUrls: any) {
   try {
@@ -106,79 +112,189 @@ async function processModalAIAnalysis(analysisId: number, imageUrls: any) {
   }
 }
 
+import { type NextFunction } from "express";
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
   // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const user = await storage.getUser(userId);
       res.json(user);
     } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
+      next(error);
     }
   });
 
   // Category routes
-  app.get("/api/categories", async (req, res) => {
+  app.get("/api/categories", async (req, res, next: NextFunction) => {
     try {
       const categories = await storage.getCategories();
       res.json(categories);
     } catch (error) {
-      console.error("Error fetching categories:", error);
-      res.status(500).json({ message: "Failed to fetch categories" });
+      next(error);
     }
   });
 
-  app.post("/api/categories", isAuthenticated, async (req, res) => {
+  app.post("/api/categories", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
     try {
       const categoryData = insertCategorySchema.parse(req.body);
       const category = await storage.createCategory(categoryData);
       res.json(category);
     } catch (error) {
-      console.error("Error creating category:", error);
-      res.status(500).json({ message: "Failed to create category" });
+      next(error);
+    }
+  });
+
+  app.put("/api/categories/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      const categoryData = insertCategorySchema.parse(req.body);
+      const category = await storage.updateCategory(id, categoryData);
+      res.json(category);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/categories/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteCategory(id);
+      res.json({ message: "Category deleted" });
+    } catch (error) {
+      next(error);
     }
   });
 
   // Material routes
-  app.get("/api/materials", async (req, res) => {
+  app.get("/api/materials", async (req, res, next: NextFunction) => {
     try {
       const materials = await storage.getMaterials();
       res.json(materials);
     } catch (error) {
-      console.error("Error fetching materials:", error);
-      res.status(500).json({ message: "Failed to fetch materials" });
+      next(error);
+    }
+  });
+
+  app.post("/api/materials", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const materialData = insertMaterialSchema.parse(req.body);
+      const material = await storage.createMaterial(materialData);
+      res.json(material);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.put("/api/materials/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      const materialData = insertMaterialSchema.parse(req.body);
+      const material = await storage.updateMaterial(id, materialData);
+      res.json(material);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/materials/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteMaterial(id);
+      res.json({ message: "Material deleted" });
+    } catch (error) {
+      next(error);
     }
   });
 
   // Era routes
-  app.get("/api/eras", async (req, res) => {
+  app.get("/api/eras", async (req, res, next: NextFunction) => {
     try {
       const eras = await storage.getEras();
       res.json(eras);
     } catch (error) {
-      console.error("Error fetching eras:", error);
-      res.status(500).json({ message: "Failed to fetch eras" });
+      next(error);
+    }
+  });
+
+  app.post("/api/eras", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const eraData = insertEraSchema.parse(req.body);
+      const era = await storage.createEra(eraData);
+      res.json(era);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.put("/api/eras/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      const eraData = insertEraSchema.parse(req.body);
+      const era = await storage.updateEra(id, eraData);
+      res.json(era);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/eras/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteEra(id);
+      res.json({ message: "Era deleted" });
+    } catch (error) {
+      next(error);
     }
   });
 
   // Brand routes
-  app.get("/api/brands", async (req, res) => {
+  app.get("/api/brands", async (req, res, next: NextFunction) => {
     try {
       const brands = await storage.getBrands();
       res.json(brands);
     } catch (error) {
-      console.error("Error fetching brands:", error);
-      res.status(500).json({ message: "Failed to fetch brands" });
+      next(error);
+    }
+  });
+
+  app.post("/api/brands", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const brandData = insertBrandSchema.parse(req.body);
+      const brand = await storage.createBrand(brandData);
+      res.json(brand);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.put("/api/brands/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      const brandData = insertBrandSchema.parse(req.body);
+      const brand = await storage.updateBrand(id, brandData);
+      res.json(brand);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/brands/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteBrand(id);
+      res.json({ message: "Brand deleted" });
+    } catch (error) {
+      next(error);
     }
   });
 
   // Product routes
-  app.get("/api/products", async (req, res) => {
+  app.get("/api/products", async (req, res, next: NextFunction) => {
     try {
       const filters = {
         categoryId: req.query.categoryId ? parseInt(req.query.categoryId as string) : undefined,
@@ -195,12 +311,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const result = await storage.getProducts(filters);
       res.json(result);
     } catch (error) {
-      console.error("Error fetching products:", error);
-      res.status(500).json({ message: "Failed to fetch products" });
+      next(error);
     }
   });
 
-  app.get("/api/products/:id", async (req, res) => {
+  app.get("/api/products/:id", async (req, res, next: NextFunction) => {
     try {
       const id = parseInt(req.params.id);
       const product = await storage.getProduct(id);
@@ -209,93 +324,106 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(product);
     } catch (error) {
-      console.error("Error fetching product:", error);
-      res.status(500).json({ message: "Failed to fetch product" });
+      next(error);
     }
   });
 
-  app.post("/api/products", isAuthenticated, async (req, res) => {
+  app.post("/api/products", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
     try {
       const productData = insertProductSchema.parse(req.body);
       const product = await storage.createProduct(productData);
       res.json(product);
     } catch (error) {
-      console.error("Error creating product:", error);
-      res.status(500).json({ message: "Failed to create product" });
+      next(error);
+    }
+  });
+
+  app.put("/api/products/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      const productData = insertProductSchema.parse(req.body);
+      const product = await storage.updateProduct(id, productData);
+      res.json(product);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/products/:id", isAuthenticated, isAdmin, async (req, res, next: NextFunction) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteProduct(id);
+      res.json({ message: "Product deleted" });
+    } catch (error) {
+      next(error);
     }
   });
 
   // Cart routes
-  app.get("/api/cart", isAuthenticated, async (req: any, res) => {
+  app.get("/api/cart", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const cartItems = await storage.getCartItems(userId);
       res.json(cartItems);
     } catch (error) {
-      console.error("Error fetching cart:", error);
-      res.status(500).json({ message: "Failed to fetch cart" });
+      next(error);
     }
   });
 
-  app.post("/api/cart", isAuthenticated, async (req: any, res) => {
+  app.post("/api/cart", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const cartItemData = insertCartItemSchema.parse({ ...req.body, userId });
       const cartItem = await storage.addToCart(cartItemData);
       res.json(cartItem);
     } catch (error) {
-      console.error("Error adding to cart:", error);
-      res.status(500).json({ message: "Failed to add to cart" });
+      next(error);
     }
   });
 
-  app.put("/api/cart/:id", isAuthenticated, async (req, res) => {
+  app.put("/api/cart/:id", isAuthenticated, async (req, res, next: NextFunction) => {
     try {
       const id = parseInt(req.params.id);
       const { quantity } = req.body;
       const cartItem = await storage.updateCartItem(id, quantity);
       res.json(cartItem);
     } catch (error) {
-      console.error("Error updating cart item:", error);
-      res.status(500).json({ message: "Failed to update cart item" });
+      next(error);
     }
   });
 
-  app.delete("/api/cart/:id", isAuthenticated, async (req, res) => {
+  app.delete("/api/cart/:id", isAuthenticated, async (req, res, next: NextFunction) => {
     try {
       const id = parseInt(req.params.id);
       await storage.removeFromCart(id);
       res.json({ message: "Item removed from cart" });
     } catch (error) {
-      console.error("Error removing from cart:", error);
-      res.status(500).json({ message: "Failed to remove from cart" });
+      next(error);
     }
   });
 
-  app.delete("/api/cart", isAuthenticated, async (req: any, res) => {
+  app.delete("/api/cart", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       await storage.clearCart(userId);
       res.json({ message: "Cart cleared" });
     } catch (error) {
-      console.error("Error clearing cart:", error);
-      res.status(500).json({ message: "Failed to clear cart" });
+      next(error);
     }
   });
 
   // Order routes
-  app.get("/api/orders", isAuthenticated, async (req: any, res) => {
+  app.get("/api/orders", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const orders = await storage.getOrders(userId);
       res.json(orders);
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      res.status(500).json({ message: "Failed to fetch orders" });
+      next(error);
     }
   });
 
-  app.get("/api/orders/:id", isAuthenticated, async (req, res) => {
+  app.get("/api/orders/:id", isAuthenticated, async (req, res, next: NextFunction) => {
     try {
       const id = parseInt(req.params.id);
       const order = await storage.getOrder(id);
@@ -304,63 +432,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(order);
     } catch (error) {
-      console.error("Error fetching order:", error);
-      res.status(500).json({ message: "Failed to fetch order" });
+      next(error);
     }
   });
 
-  app.post("/api/orders", isAuthenticated, async (req: any, res) => {
+  app.post("/api/orders", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const orderData = insertOrderSchema.parse({ ...req.body, userId });
       const order = await storage.createOrder(orderData);
       res.json(order);
     } catch (error) {
-      console.error("Error creating order:", error);
-      res.status(500).json({ message: "Failed to create order" });
+      next(error);
     }
   });
 
   // Wishlist routes
-  app.get("/api/wishlist", isAuthenticated, async (req: any, res) => {
+  app.get("/api/wishlist", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const wishlistItems = await storage.getWishlistItems(userId);
       res.json(wishlistItems);
     } catch (error) {
-      console.error("Error fetching wishlist:", error);
-      res.status(500).json({ message: "Failed to fetch wishlist" });
+      next(error);
     }
   });
 
-  app.post("/api/wishlist", isAuthenticated, async (req: any, res) => {
+  app.post("/api/wishlist", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const wishlistItemData = insertWishlistItemSchema.parse({ ...req.body, userId });
       const wishlistItem = await storage.addToWishlist(wishlistItemData);
       res.json(wishlistItem);
     } catch (error) {
-      console.error("Error adding to wishlist:", error);
-      res.status(500).json({ message: "Failed to add to wishlist" });
+      next(error);
     }
   });
 
-  app.delete("/api/wishlist/:productId", isAuthenticated, async (req: any, res) => {
+  app.delete("/api/wishlist/:productId", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const productId = parseInt(req.params.productId);
       await storage.removeFromWishlist(userId, productId);
       res.json({ message: "Item removed from wishlist" });
     } catch (error) {
-      console.error("Error removing from wishlist:", error);
-      res.status(500).json({ message: "Failed to remove from wishlist" });
+      next(error);
     }
   });
 
   // AI Analysis routes
-  app.post("/api/ai-analysis", isAuthenticated, async (req: any, res) => {
+  app.post("/api/ai-analysis", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const analysisData = insertAiAnalysisSchema.parse({ ...req.body, userId });
       const analysis = await storage.createAiAnalysis(analysisData);
 
@@ -369,23 +492,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(analysis);
     } catch (error) {
-      console.error("Error creating AI analysis:", error);
-      res.status(500).json({ message: "Failed to create AI analysis" });
+      next(error);
     }
   });
 
-  app.get("/api/ai-analysis", isAuthenticated, async (req: any, res) => {
+  app.get("/api/ai-analysis", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user.id;
       const analyses = await storage.getUserAiAnalyses(userId);
       res.json(analyses);
     } catch (error) {
-      console.error("Error fetching AI analyses:", error);
-      res.status(500).json({ message: "Failed to fetch AI analyses" });
+      next(error);
     }
   });
 
-  app.get("/api/ai-analysis/:id", isAuthenticated, async (req, res) => {
+  app.get("/api/ai-analysis/:id", isAuthenticated, async (req, res, next: NextFunction) => {
     try {
       const id = parseInt(req.params.id);
       const analysis = await storage.getAiAnalysis(id);
@@ -394,13 +515,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json(analysis);
     } catch (error) {
-      console.error("Error fetching AI analysis:", error);
-      res.status(500).json({ message: "Failed to fetch AI analysis" });
+      next(error);
     }
   });
 
   // Stripe checkout routes
-  app.post("/api/checkout/create-payment-intent", isAuthenticated, async (req: any, res) => {
+  app.post("/api/checkout/create-payment-intent", isAuthenticated, async (req: any, res, next: NextFunction) => {
     try {
       const { amount, orderId } = req.body;
       
@@ -408,22 +528,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid amount" });
       }
 
-      // Mock payment intent for now since Stripe isn't configured
-      // In production, you would use: const paymentIntent = await stripe.paymentIntents.create(...)
-      const mockPaymentIntent = {
-        clientSecret: `pi_mock_${Date.now()}_secret_${Math.random().toString(36).substring(7)}`,
+      const paymentIntent = await stripe.paymentIntents.create({
         amount,
         currency: 'usd',
-        status: 'requires_payment_method'
-      };
+        metadata: { orderId },
+      });
 
       res.json({ 
-        clientSecret: mockPaymentIntent.clientSecret,
-        amount: mockPaymentIntent.amount 
+        clientSecret: paymentIntent.client_secret,
+        amount: paymentIntent.amount
       });
     } catch (error) {
-      console.error("Error creating payment intent:", error);
-      res.status(500).json({ message: "Failed to create payment intent" });
+      next(error);
     }
   });
 

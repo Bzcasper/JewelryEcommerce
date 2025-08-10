@@ -45,18 +45,26 @@ export interface IStorage {
   // Category operations
   getCategories(): Promise<Category[]>;
   createCategory(category: InsertCategory): Promise<Category>;
+  updateCategory(id: number, category: Partial<InsertCategory>): Promise<Category>;
+  deleteCategory(id: number): Promise<void>;
 
   // Material operations
   getMaterials(): Promise<Material[]>;
   createMaterial(material: InsertMaterial): Promise<Material>;
+  updateMaterial(id: number, material: Partial<InsertMaterial>): Promise<Material>;
+  deleteMaterial(id: number): Promise<void>;
 
   // Era operations
   getEras(): Promise<Era[]>;
   createEra(era: InsertEra): Promise<Era>;
+  updateEra(id: number, era: Partial<InsertEra>): Promise<Era>;
+  deleteEra(id: number): Promise<void>;
 
   // Brand operations
   getBrands(): Promise<Brand[]>;
   createBrand(brand: InsertBrand): Promise<Brand>;
+  updateBrand(id: number, brand: Partial<InsertBrand>): Promise<Brand>;
+  deleteBrand(id: number): Promise<void>;
 
   // Product operations
   getProducts(filters?: {
@@ -74,9 +82,10 @@ export interface IStorage {
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product>;
+  deleteProduct(id: number): Promise<void>;
 
   // Cart operations
-  getCartItems(userId: string): Promise<CartItem[]>;
+  getCartItems(userId: string): Promise<(CartItem & { product: Product & { category: Category, brand: Brand } })[]>;
   addToCart(cartItem: InsertCartItem): Promise<CartItem>;
   updateCartItem(id: number, quantity: number): Promise<CartItem>;
   removeFromCart(id: number): Promise<void>;
@@ -89,7 +98,7 @@ export interface IStorage {
   updateOrderStatus(id: number, status: string): Promise<Order>;
 
   // Wishlist operations
-  getWishlistItems(userId: string): Promise<WishlistItem[]>;
+  getWishlistItems(userId: string): Promise<(WishlistItem & { product: Product & { category: Category, brand: Brand } })[]>;
   addToWishlist(wishlistItem: InsertWishlistItem): Promise<WishlistItem>;
   removeFromWishlist(userId: string, productId: number): Promise<void>;
 
@@ -132,6 +141,23 @@ export class DatabaseStorage implements IStorage {
     return created;
   }
 
+  async updateCategory(id: number, category: Partial<InsertCategory>): Promise<Category> {
+    const [updated] = await db
+      .update(categories)
+      .set(category)
+      .where(eq(categories.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteProduct(id: number): Promise<void> {
+    await db.delete(products).where(eq(products.id, id));
+  }
+
+  async deleteCategory(id: number): Promise<void> {
+    await db.delete(categories).where(eq(categories.id, id));
+  }
+
   // Material operations
   async getMaterials(): Promise<Material[]> {
     return await db.select().from(materials);
@@ -140,6 +166,19 @@ export class DatabaseStorage implements IStorage {
   async createMaterial(material: InsertMaterial): Promise<Material> {
     const [created] = await db.insert(materials).values([material]).returning();
     return created;
+  }
+
+  async updateMaterial(id: number, material: Partial<InsertMaterial>): Promise<Material> {
+    const [updated] = await db
+      .update(materials)
+      .set(material)
+      .where(eq(materials.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteMaterial(id: number): Promise<void> {
+    await db.delete(materials).where(eq(materials.id, id));
   }
 
   // Era operations
@@ -152,6 +191,19 @@ export class DatabaseStorage implements IStorage {
     return created;
   }
 
+  async updateEra(id: number, era: Partial<InsertEra>): Promise<Era> {
+    const [updated] = await db
+      .update(eras)
+      .set(era)
+      .where(eq(eras.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteEra(id: number): Promise<void> {
+    await db.delete(eras).where(eq(eras.id, id));
+  }
+
   // Brand operations
   async getBrands(): Promise<Brand[]> {
     return await db.select().from(brands);
@@ -160,6 +212,19 @@ export class DatabaseStorage implements IStorage {
   async createBrand(brand: InsertBrand): Promise<Brand> {
     const [created] = await db.insert(brands).values([brand]).returning();
     return created;
+  }
+
+  async updateBrand(id: number, brand: Partial<InsertBrand>): Promise<Brand> {
+    const [updated] = await db
+      .update(brands)
+      .set(brand)
+      .where(eq(brands.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteBrand(id: number): Promise<void> {
+    await db.delete(brands).where(eq(brands.id, id));
   }
 
   // Product operations
@@ -269,8 +334,33 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Cart operations
-  async getCartItems(userId: string): Promise<CartItem[]> {
-    return await db.select().from(cartItems).where(eq(cartItems.userId, userId));
+  async getCartItems(userId: string): Promise<(CartItem & { product: Product & { category: Category, brand: Brand } })[]> {
+    const userCartItems = await db.select().from(cartItems).where(eq(cartItems.userId, userId));
+    const productIds = userCartItems.map(i => i.productId);
+    if (productIds.length === 0) {
+      return [];
+    }
+    const cartProducts = await db.select().from(products).where(inArray(products.id, productIds));
+    const categoryIds = cartProducts.map(p => p.categoryId);
+    const brandIds = cartProducts.map(p => p.brandId);
+    const [allCategories, allBrands] = await Promise.all([
+      db.select().from(categories).where(inArray(categories.id, categoryIds as number[])),
+      db.select().from(brands).where(inArray(brands.id, brandIds as number[]))
+    ]);
+
+    return userCartItems.map(item => {
+      const product = cartProducts.find(p => p.id === item.productId);
+      const category = allCategories.find(c => c.id === product?.categoryId);
+      const brand = allBrands.find(b => b.id === product?.brandId);
+      return {
+        ...item,
+        product: {
+          ...product,
+          category,
+          brand
+        }
+      }
+    }) as (CartItem & { product: Product & { category: Category, brand: Brand } })[];
   }
 
   async addToCart(cartItem: InsertCartItem): Promise<CartItem> {
@@ -346,8 +436,33 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Wishlist operations
-  async getWishlistItems(userId: string): Promise<WishlistItem[]> {
-    return await db.select().from(wishlistItems).where(eq(wishlistItems.userId, userId));
+  async getWishlistItems(userId: string): Promise<(WishlistItem & { product: Product & { category: Category, brand: Brand } })[]> {
+    const userWishlistItems = await db.select().from(wishlistItems).where(eq(wishlistItems.userId, userId));
+    const productIds = userWishlistItems.map(i => i.productId);
+    if (productIds.length === 0) {
+      return [];
+    }
+    const wishlistProducts = await db.select().from(products).where(inArray(products.id, productIds));
+    const categoryIds = wishlistProducts.map(p => p.categoryId);
+    const brandIds = wishlistProducts.map(p => p.brandId);
+    const [allCategories, allBrands] = await Promise.all([
+      db.select().from(categories).where(inArray(categories.id, categoryIds as number[])),
+      db.select().from(brands).where(inArray(brands.id, brandIds as number[]))
+    ]);
+
+    return userWishlistItems.map(item => {
+      const product = wishlistProducts.find(p => p.id === item.productId);
+      const category = allCategories.find(c => c.id === product?.categoryId);
+      const brand = allBrands.find(b => b.id === product?.brandId);
+      return {
+        ...item,
+        product: {
+          ...product,
+          category,
+          brand
+        }
+      }
+    }) as (WishlistItem & { product: Product & { category: Category, brand: Brand } })[];
   }
 
   async addToWishlist(wishlistItem: InsertWishlistItem): Promise<WishlistItem> {

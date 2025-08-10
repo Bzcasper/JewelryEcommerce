@@ -35,10 +35,11 @@ function CheckoutForm({ amount, orderId, onSuccess }: CheckoutFormProps) {
 
     try {
       // Create payment intent on the server
-      const { clientSecret } = await apiRequest('POST', '/api/checkout/create-payment-intent', {
+      const response = await apiRequest('POST', '/api/checkout/create-payment-intent', {
         amount,
         orderId
       });
+      const { clientSecret } = await response.json();
 
       // Confirm the payment
       const result = await stripe.confirmCardPayment(clientSecret, {

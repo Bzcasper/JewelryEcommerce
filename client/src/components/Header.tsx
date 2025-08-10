@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Badge } from '@/components/ui/badge';
 import { useQuery } from '@tanstack/react-query';
 import SearchBar from '@/components/SearchBar';
+import { type CartItem } from '@shared/schema';
 
 export default function Header() {
   const [location, setLocation] = useLocation();
@@ -15,7 +16,7 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Get cart count for authenticated users
-  const { data: cartItems = [] } = useQuery({
+  const { data: cartItems = [] } = useQuery<CartItem[]>({
     queryKey: ['/api/cart'],
     enabled: isAuthenticated,
   });
