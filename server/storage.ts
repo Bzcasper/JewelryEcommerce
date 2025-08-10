@@ -341,11 +341,11 @@ export class DatabaseStorage implements IStorage {
       return [];
     }
     const cartProducts = await db.select().from(products).where(inArray(products.id, productIds));
-    const categoryIds = cartProducts.map(p => p.categoryId);
-    const brandIds = cartProducts.map(p => p.brandId);
+    const categoryIds = cartProducts.map(p => p.categoryId).filter((id): id is number => typeof id === "number");
+    const brandIds = cartProducts.map(p => p.brandId).filter((id): id is number => typeof id === "number");
     const [allCategories, allBrands] = await Promise.all([
-      db.select().from(categories).where(inArray(categories.id, categoryIds as number[])),
-      db.select().from(brands).where(inArray(brands.id, brandIds as number[]))
+      db.select().from(categories).where(inArray(categories.id, categoryIds)),
+      db.select().from(brands).where(inArray(brands.id, brandIds))
     ]);
 
     return userCartItems.map(item => {
