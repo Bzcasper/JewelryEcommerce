@@ -179,7 +179,7 @@ export default function Cart() {
                           {item.product?.title}
                         </h3>
                         <p className="text-sm text-warm-tan-dark mb-2">
-                          {(item.product as any)?.category?.name} • {(item.product as any)?.brand?.name}
+                          {item.product?.category?.name} • {item.product?.brand?.name}
                         </p>
                         
                         {/* Quantity Controls */}
